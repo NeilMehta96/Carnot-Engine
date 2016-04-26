@@ -115,7 +115,7 @@ public class PlayScreen implements Screen{
             double end = System.currentTimeMillis();
 
 //            System.out.println((end-start)/1000);
-            System.out.println(currentPosition.halfMoveNumber);
+//            System.out.println(currentPosition.halfMoveNumber);
 //            System.out.println(currentPosition.allPieces[6][2]);
 //            System.out.println(prevMove.from.x);
 //            System.out.println(prevMove.from.y);
@@ -123,7 +123,16 @@ public class PlayScreen implements Screen{
 //            System.out.println(prevMove.to.y);
 
             currentPosition.movePiece(prevMove);
+            for (MoveTuple move : currentPosition.moveList){
+                System.out.println(move.from.x);
+                System.out.println(move.from.y);
+                System.out.println(move.to.x);
+                System.out.println(move.to.y);
+
+            }
         }
+
+
 
         if (Gdx.input.justTouched()){
 

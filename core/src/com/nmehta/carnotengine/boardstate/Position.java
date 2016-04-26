@@ -3,6 +3,9 @@ package com.nmehta.carnotengine.boardstate;
 import com.nmehta.carnotengine.utils.MoveTuple;
 import com.nmehta.carnotengine.utils.PointTuple;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
 
 /**
@@ -52,6 +55,8 @@ public class Position implements Comparable<Position> {
     public int score = 0;
     public int halfMoveNumber = 0;
 
+    public List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
+
 
     public Position(Position position){
         this.allPieces = copyBoard(position.allPieces);
@@ -72,6 +77,7 @@ public class Position implements Comparable<Position> {
         }
         this.score = position.score;
         this.halfMoveNumber = position.halfMoveNumber;
+        this.moveList = copyList(position.moveList);
     }
 
     public Position(){
@@ -207,6 +213,7 @@ public class Position implements Comparable<Position> {
         }
         whitesMove = !whitesMove;
         halfMoveNumber++;
+        moveList.add(move);
         return this;
     }
 
@@ -218,6 +225,14 @@ public class Position implements Comparable<Position> {
             }
         }
         return output;
+    }
+
+    private static List<MoveTuple> copyList(List<MoveTuple> moves){
+        LinkedList<MoveTuple> toReturn = new LinkedList<MoveTuple>();
+        for (MoveTuple move : moves){
+            toReturn.add(move);
+        }
+        return toReturn;
     }
 
     private static boolean pieceIsWhite(ChessPieces piece){
