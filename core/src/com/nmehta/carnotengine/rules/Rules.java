@@ -284,6 +284,7 @@ public class Rules {
             position.checkForCheck = true;
             position.whitesMove = true;
             //position.halfMoveNumber--;
+            //github check
         }
 
         return moveAllowed;
