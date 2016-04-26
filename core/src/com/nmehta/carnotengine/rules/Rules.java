@@ -276,15 +276,18 @@ public class Rules {
             if (to.x == 2) {
                 moveAllowed = position.allPieces[0][1] == empty && position.allPieces[0][2] == empty &&
                         position.allPieces[0][3] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(3, 0)), position) && notInCheck(position);
+                        && notInCheck(new MoveTuple(from, new PointTuple(3, 0)), position);
             } else {
                 moveAllowed = position.allPieces[0][5] == empty && position.allPieces[0][6] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(5, 0)), position) && notInCheck(position);
+                        && notInCheck(new MoveTuple(from, new PointTuple(5, 0)), position);
             }
-            position.checkForCheck = true;
-            position.whitesMove = true;
-            //position.halfMoveNumber--;
-            System.out.println("git check");
+            if (moveAllowed){
+                Position checkPos = new Position(position);
+                checkPos.whitesMove = false;
+                moveAllowed = notInCheck(checkPos);
+            }
+//            position.checkForCheck = true;
+//            position.whitesMove = true;
         }
 
         return moveAllowed;
@@ -303,14 +306,18 @@ public class Rules {
             if (to.x == 2) {
                 moveAllowed = position.allPieces[7][1] == empty && position.allPieces[7][2] == empty &&
                         position.allPieces[7][3] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(3, 7)), position) && notInCheck(position);
+                        && notInCheck(new MoveTuple(from, new PointTuple(3, 7)), position);
             } else {
                 moveAllowed = position.allPieces[7][5] == empty && position.allPieces[7][6] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(5, 7)), position) && notInCheck(position);
+                        && notInCheck(new MoveTuple(from, new PointTuple(5, 7)), position);
            }
-            position.checkForCheck = true;
-            position.whitesMove = false;
-            //position.halfMoveNumber--;
+            if (moveAllowed){
+                Position checkPos = new Position(position);
+                checkPos.whitesMove = true;
+                moveAllowed = notInCheck(checkPos);
+            }
+//            position.checkForCheck = true;
+//            position.whitesMove = false;
         }
         return moveAllowed;
     }
