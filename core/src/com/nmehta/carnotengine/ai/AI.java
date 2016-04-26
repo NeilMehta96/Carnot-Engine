@@ -52,15 +52,14 @@ public final class AI {
 
     private static TreeNodeReturn IDDFS(Position position) {
         TreeNodeReturn bestSoFar = new TreeNodeReturn(-40000, null);
-        for (int depth = 1; depth <= CarnotEngine.depthOfSearch; depth++) {
-//            if (PlayScreen.positionHash.containsKey(position)) {
-//                System.out.println("this happens");
-//                bestSoFar = alphabeta(new Tree(position, PlayScreen.positionHash.get(position)), depth, -40000, 40000);
-//            }
-//            else {
+        for (int depth = 4; depth <= CarnotEngine.depthOfSearch; depth++) {
+            if (PlayScreen.positionHash.containsKey(position)) {
+                System.out.println("this happens");
+                bestSoFar = alphabeta(new Tree(position, PlayScreen.positionHash.get(position)), depth, -40000, 40000);
+            }
+            else {
                 bestSoFar = alphabeta(new Tree(position), depth, -40000, 40000);
-//            }
-            //if (depth!=CarnotEngine.depthOfSearch){bestSoFar = new TreeNodeReturn(-40000,null);}
+            }
         }
         return bestSoFar;
     }

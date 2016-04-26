@@ -23,8 +23,8 @@ public final class OpeningBook{
             double c6 = 116055;
             double d6 = 72476;
             double sumGames = c5 + e5 + e6 + c6 + d6;
-            double rand = 0.1;
-            //double rand = Math.random();
+//            double rand = 0.1;
+            double rand = Math.random();
             if (rand < c5 / sumGames) {
                 return new MoveTuple(new PointTuple(2, 6), new PointTuple(2, 4));
             } else if (rand < (c5 + e5) / sumGames) {
