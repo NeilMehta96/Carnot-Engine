@@ -13,7 +13,7 @@ import java.util.*;
 public class Tree {
 
     public Position root;
-    public ArrayList<Position> children = new ArrayList<Position>();
+    public List<Position> children = new ArrayList<Position>();
 
 
     /*
@@ -32,7 +32,7 @@ public class Tree {
 
     public Tree(Position root){
         this.root = new Position(root);
-        ArrayList<Position> childList = new ArrayList<Position>();
+        List<Position> childList = new ArrayList<Position>();
         for (MoveTuple tuple : AI.generatePositionPossibilities(root)){
             Position newPos = new Position(this.root);
             childList.add(newPos.movePiece(tuple));
@@ -43,13 +43,13 @@ public class Tree {
             Collections.reverse(childList);
         }
         children = childList;
-        PlayScreen.positionHash.put(this.root,children);
+//        PlayScreen.positionHash.put(root.moveList,children);
     }
 
 
-    public Tree(Position root, ArrayList<Position> children){
+    public Tree(Position root, List<Position> children){
         this.root = new Position(root);
-        this.children = children;
+        this.children = Position.copyList(children);
         System.out.println("this happens");
     }
 

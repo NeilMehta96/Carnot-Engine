@@ -18,9 +18,7 @@ import com.nmehta.carnotengine.utils.MoveTuple;
 import com.nmehta.carnotengine.utils.PointTuple;
 import com.nmehta.carnotengine.utils.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by Neil on 4/18/2016.
@@ -61,7 +59,8 @@ public class PlayScreen implements Screen{
     private MoveTuple prevMove;
 
 
-    public static HashMap<Position,ArrayList<Position>> positionHash = new HashMap<Position,ArrayList<Position>>();
+    public static HashMap<List<MoveTuple>,List<Position>> positionHash =
+            new HashMap<List<MoveTuple>,List<Position>>();
 
 
 
@@ -108,13 +107,14 @@ public class PlayScreen implements Screen{
         System.gc();
 
         if (!CarnotEngine.playerMovesBlack&&!currentPosition.whitesMove){
+
+            currentPosition.recentMoves = new LinkedList<MoveTuple>();
             double start = System.currentTimeMillis();
             prevMove = AI.generateBlackBestLegalMoveGivenDepth(currentPosition);
-            positionHash = new HashMap<Position,ArrayList<Position>>();
-            //prevMove = AI.generateBlackBestLegalMoveDepth1(Position.currentPosition);
             double end = System.currentTimeMillis();
+            positionHash = new HashMap<List<MoveTuple>,List<Position>>();
 
-//            System.out.println((end-start)/1000);
+            System.out.println((end-start)/1000);
 //            System.out.println(currentPosition.halfMoveNumber);
 //            System.out.println(currentPosition.allPieces[6][2]);
 //            System.out.println(prevMove.from.x);
@@ -123,13 +123,13 @@ public class PlayScreen implements Screen{
 //            System.out.println(prevMove.to.y);
 
             currentPosition.movePiece(prevMove);
-            for (MoveTuple move : currentPosition.moveList){
-                System.out.println(move.from.x);
-                System.out.println(move.from.y);
-                System.out.println(move.to.x);
-                System.out.println(move.to.y);
-
-            }
+//            for (MoveTuple move : currentPosition.moveList){
+//                System.out.println(move.from.x);
+//                System.out.println(move.from.y);
+//                System.out.println(move.to.x);
+//                System.out.println(move.to.y);
+//
+//            }
         }
 
 

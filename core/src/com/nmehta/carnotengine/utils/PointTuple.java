@@ -21,6 +21,12 @@ public final class PointTuple {
         this.y = tuple.y;
     }
 
+    @Override
+    public boolean equals(Object oldpt){
+        PointTuple pt = (PointTuple) oldpt;
+        return this.x == pt.x && this.y == pt.y;
+    }
+
 
     public PointTuple(Vector3 v3) {
         this.x = (int)v3.x+4;

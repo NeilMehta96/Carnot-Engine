@@ -56,6 +56,7 @@ public class Position implements Comparable<Position> {
     public int halfMoveNumber = 0;
 
     public List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
+    public List<MoveTuple> recentMoves = new LinkedList<MoveTuple>();
 
 
     public Position(Position position){
@@ -78,6 +79,7 @@ public class Position implements Comparable<Position> {
         this.score = position.score;
         this.halfMoveNumber = position.halfMoveNumber;
         this.moveList = copyList(position.moveList);
+        this.recentMoves = copyList(position.recentMoves);
     }
 
     public Position(){
@@ -214,6 +216,7 @@ public class Position implements Comparable<Position> {
         whitesMove = !whitesMove;
         halfMoveNumber++;
         moveList.add(move);
+        recentMoves.add(move);
         return this;
     }
 
@@ -227,10 +230,10 @@ public class Position implements Comparable<Position> {
         return output;
     }
 
-    private static List<MoveTuple> copyList(List<MoveTuple> moves){
-        LinkedList<MoveTuple> toReturn = new LinkedList<MoveTuple>();
-        for (MoveTuple move : moves){
-            toReturn.add(move);
+    public static <T> List<T> copyList(List<T> obList){
+        LinkedList<T> toReturn = new LinkedList<T>();
+        for (T obj : obList){
+            toReturn.add(obj);
         }
         return toReturn;
     }

@@ -17,4 +17,10 @@ public final class  MoveTuple {
         this.from = move.from;
         this.to = move.to;
     }
+
+    @Override
+    public boolean equals(Object move){
+        MoveTuple newMove = (MoveTuple) move;
+        return newMove.from.equals(this.from) && newMove.to.equals(this.to);
+    }
 }

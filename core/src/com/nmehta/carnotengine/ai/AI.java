@@ -53,13 +53,13 @@ public final class AI {
     private static TreeNodeReturn IDDFS(Position position) {
         TreeNodeReturn bestSoFar = new TreeNodeReturn(-40000, null);
         for (int depth = 4; depth <= CarnotEngine.depthOfSearch; depth++) {
-            if (PlayScreen.positionHash.containsKey(position)) {
-                System.out.println("this happens");
-                bestSoFar = alphabeta(new Tree(position, PlayScreen.positionHash.get(position)), depth, -40000, 40000);
-            }
-            else {
+//            if (PlayScreen.positionHash.containsKey(position.moveList)) {
+//                System.out.println("hashing happens");
+//                bestSoFar = alphabeta(new Tree(position, PlayScreen.positionHash.get(position.moveList)), depth, -40000, 40000);
+//            }
+//            else {
                 bestSoFar = alphabeta(new Tree(position), depth, -40000, 40000);
-            }
+//            }
         }
         return bestSoFar;
     }
