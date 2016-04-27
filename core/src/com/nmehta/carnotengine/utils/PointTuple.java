@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
  */
 
 
-public final class PointTuple {
+public final class PointTuple {/*
     public final int x;
     public final int y;
 
@@ -31,5 +31,5 @@ public final class PointTuple {
     public PointTuple(Vector3 v3) {
         this.x = (int)v3.x+4;
         this.y = (int)v3.y+4;
-    }
+    }*/
 }

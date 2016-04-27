@@ -5,22 +5,18 @@ package com.nmehta.carnotengine.utils;
  */
 public final class  MoveTuple {
 
-    public final PointTuple from;
-    public final PointTuple to;
+    public final int from;
+    public final int to;
 
-    public MoveTuple(PointTuple from, PointTuple to){
+    public MoveTuple(int from, int to){
         this.from = from;
         this.to = to;
     }
 
-    public MoveTuple(MoveTuple move) {
-        this.from = move.from;
-        this.to = move.to;
-    }
 
     @Override
     public boolean equals(Object move){
         MoveTuple newMove = (MoveTuple) move;
-        return newMove.from.equals(this.from) && newMove.to.equals(this.to);
+        return newMove.from==this.from && newMove.to==this.to;
     }
 }

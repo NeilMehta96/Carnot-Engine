@@ -87,7 +87,12 @@ public class Rules {
 
 
     private static boolean whitePawnRuleCheck(MoveTuple move, Position position) {
+        
+        if ()
 
+
+
+        /*
         //TODO: implement En Passant
         PointTuple to = move.to;
         PointTuple from = move.from;
@@ -100,7 +105,7 @@ public class Rules {
         } else if ((!position.doublePawnMove) && (to.y - 1 == from.y && ((to.x - 1 == from.x || to.x + 1 == from.x) && position.blackPieces[to.y][to.x] != empty))) {
             moveAllowed = true;
         }
-        /**
+
          else if (state.doublePawnMove&&from.y==state.enPassant.y&&to.y-1==from.y&&to.x==state.enPassant.x&&
          (to.x-1==from.x||to.x+1==from.x)){
          moveAllowed = whiteNotInCheck(to,allPieces,whitePieces,state,blackPieces);
@@ -109,13 +114,14 @@ public class Rules {
 
          }
          }
-         */
+
 
         if (moveAllowed && position.checkForCheck) {
             moveAllowed = notInCheck(move, position);
         }
 
         return moveAllowed;
+        */
     }
 
     private static boolean blackPawnRuleCheck(MoveTuple move, Position position) {
