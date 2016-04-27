@@ -31,18 +31,19 @@ public class Position implements Comparable<Position> {
         empty
     }
 
-    private static int[][] bpawnPST = new int[8][8];
-    private static int[][] brookPST = new int[8][8];
-    private static int[][] bknightPST = new int[8][8];
-    private static int[][] bbishopPST = new int[8][8];
-    private static int[][] bqueenPST = new int[8][8];
-    private static int[][] bkingMidPST = new int[8][8];
-    private static int[][] bkingEndPST = new int[8][8];
+    private static int[][] bpawnPST = new int[64];
+    private static int[][] brookPST = new int[64];
+    private static int[][] bknightPST = new int[64];
+    private static int[][] bbishopPST = new int[64];
+    private static int[][] bqueenPST = new int[64];
+    private static int[][] bkingMidPST = new int[64];
+    private static int[][] bkingEndPST = new int[64];
 
 
-    public ChessPieces[][] allPieces = new ChessPieces[8][8];
-    public ChessPieces[][] whitePieces = new ChessPieces[8][8];
-    public ChessPieces[][] blackPieces = new ChessPieces[8][8];
+    // TODO: make fields private and have getting and have movePiece be a constructor
+    public long allPieces;
+    public long whitePieces;
+    public long blackPieces;
     public boolean whiteCanCastle = true;
     public boolean blackCanCastle = true;
     public PointTuple enPassant;
@@ -60,7 +61,7 @@ public class Position implements Comparable<Position> {
 
 
     public Position(Position position){
-        this.allPieces = copyBoard(position.allPieces);
+        this.allPieces = position.allPieces;
         this.whitePieces = copyBoard(position.whitePieces);
         this.blackPieces = copyBoard(position.blackPieces);
         this.whiteCanCastle = position.whiteCanCastle;
