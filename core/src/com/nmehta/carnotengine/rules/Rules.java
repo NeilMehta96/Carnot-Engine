@@ -87,7 +87,7 @@ public class Rules {
 
 
     private static boolean whitePawnRuleCheck(MoveTuple move, Position position) {
-        
+
         if ()
 
 
@@ -127,10 +127,10 @@ public class Rules {
     private static boolean blackPawnRuleCheck(MoveTuple move, Position position) {
 
         //TODO: implement En Passant
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
         boolean moveAllowed = false;
-        if (to.x == from.x && to.y + 2 == from.y && from.y == 6 && position.allPieces[to.y][to.x] == empty && position.allPieces[to.y + 1][to.x] == empty) {
+        if (to == from && to.y + 16 == from.y && from.y == 6 && position.allPieces[to.y][to.x] == empty && position.allPieces[to.y + 1][to.x] == empty) {
             moveAllowed = true;
         } else if (to.x == from.x && to.y + 1 == from.y && position.allPieces[to.y][to.x] == empty) {
             moveAllowed = true;
