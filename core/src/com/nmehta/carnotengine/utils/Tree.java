@@ -49,7 +49,7 @@ public class Tree {
     public Tree(Position root, List<Position> children){
         this.root = new Position(root);
         this.children = Position.copyList(children);
-        System.out.println("this happens");
+        //System.out.println("this happens");
     }
 
 

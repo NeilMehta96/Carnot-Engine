@@ -193,7 +193,7 @@ public class Position implements Comparable<Position> {
 
 
             if (to/8==7&&position.whitePieces[from]==wpawn){
-                position.score -= bqueenPST[to];
+                position.score -= wqueenPST[to]-wpawnPST[from];
                 position.whitePieces[to] = wqueen;
                 position.allPieces[to] = wqueen;
             }
@@ -416,7 +416,7 @@ public class Position implements Comparable<Position> {
     private static void initPST2() {
 
 
-        int[] wpawnPST = new int[]{
+        wpawnPST = new int[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 -21, -16, -6, -1, -1, -6, -16, -21,
                 -21, -16, -6, 4, 4, -6, -16, -21,
@@ -428,7 +428,7 @@ public class Position implements Comparable<Position> {
 
         };
         /*
-        int[] wpawnEndPST = new int[]{
+        wpawnEndPST = new int[]{
                 0, 0, 0, 0, 0, 0, 0, 0,,
                 5, -10, -20, -25, -25, -20, -10, 5,
                 5, -10, -20, -25, -25, -20, -10, 5,
@@ -440,7 +440,7 @@ public class Position implements Comparable<Position> {
         };
         */
 
-        int[] wknightPST = new int[]{
+        wknightPST = new int[]{
                 -69, -19, -24, -14, -14, -24, -19, -69,
                 -54, -39, -9, 11, 11, -9, -39, -54,
                 -39, 1, 31, 21, 21, 31, 1, -39,
@@ -452,7 +452,7 @@ public class Position implements Comparable<Position> {
 
         };
         /*
-        int[] wknightEndPST = new int[]{
+        wknightEndPST = new int[]{
                 -63, -53, -43, -43, -43, -43, -53, -63,
                 -53, -43, 18, 28, 28, 18, -43, -53,
                 -43, 18, 48, 38, 38, 48, 18, -43,
@@ -464,7 +464,7 @@ public class Position implements Comparable<Position> {
         };
         */
 
-        int[] wbishopPST = new int[]{
+        wbishopPST = new int[]{
                 -30, -25, -20, -20, -20, -20, -25, -30,
                 -28, 11, 6, 1, 1, 6, 11, -28,
                 -25, 6, 16, 11, 11, 16, 6, -25,
@@ -476,7 +476,7 @@ public class Position implements Comparable<Position> {
 
         };
         /*
-        int[] wbishopEndPST = new int[]{
+        wbishopEndPST = new int[]{
                 -38, -18, -8, 2, 2, -8, -18, -38,
                 -18, -8, 2, 7, 7, 2, -8, -18,
                 -8, 2, 10, 12, 12, 10, 2, -8,
@@ -488,7 +488,7 @@ public class Position implements Comparable<Position> {
         };
         */
 
-        int[] wrookPST = new int[]{
+        wrookPST = new int[]{
                 -8, -6, 2, 7, 7, 2, -6, -8,
                 -8, -6, 2, 7, 7, 2, -6, -8,
                 -8, -6, 6, 7, 7, 6, -6, -8,
@@ -500,7 +500,7 @@ public class Position implements Comparable<Position> {
 
         };
         /*
-        int[] wrookEndPST = new int[]{
+        wrookEndPST = new int[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
@@ -512,7 +512,7 @@ public class Position implements Comparable<Position> {
         };
         */
 
-        int[] wqueenPST = new int[]{
+        wqueenPST = new int[]{
                 -26, -16, -6, 4, 4, -6, -16, -26,
                 -16, -11, -1, 4, 4, -1, -11, -16,
                 -6, -6, -1, 4, 4, -1, -6, -6,
@@ -524,7 +524,7 @@ public class Position implements Comparable<Position> {
 
         };
         /*
-        int[] wqueenEndPST = new int[]{
+        wqueenEndPST = new int[]{
                 -46, -41, -31, -26, -26, -31, -41, -46,
                 -31, -26, -16, -6, -6, -16, -26, -31,
                 -16, -1, 14, 24, 24, 14, -1, -16,
@@ -536,7 +536,7 @@ public class Position implements Comparable<Position> {
         };
         */
 
-        int[] wkingMidPST = new int[]{
+        wkingMidPST = new int[]{
                 -20, 0, 0, -10, -10, 0, 0, -20,
                 -30, -30, -30, -35, -35, -30, -30, -30,
                 -40, -40, -45, -50, -50, -45, -40, -40,
@@ -548,7 +548,7 @@ public class Position implements Comparable<Position> {
 
         };
 
-        int[] wkingEndPST = new int[]{
+        wkingEndPST = new int[]{
                 -20, 0, 0, -10, -10, 0, 0, -20,
                 -30, -30, -30, -35, -35, -30, -30, -30,
                 -40, -40, -45, -50, -50, -45, -40, -40,

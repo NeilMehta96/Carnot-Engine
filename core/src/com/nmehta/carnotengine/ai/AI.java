@@ -310,7 +310,6 @@ public final class AI {
             moves.add(from-8);
             moves.add(from-9);
             if ((piece == wking && position.whiteCanCastle) || (piece == bking && position.blackCanCastle)) {
-                System.out.println("this happens");
                 moves.add(from+2);
                 moves.add(from-2);
             }
