@@ -2,15 +2,10 @@ package com.nmehta.carnotengine.openingbook;
 
 import com.nmehta.carnotengine.boardstate.Position;
 import com.nmehta.carnotengine.utils.MoveTuple;
-import com.nmehta.carnotengine.utils.PointTuple;
 
-import static com.badlogic.gdx.math.MathUtils.random;
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
-import static com.nmehta.carnotengine.screens.PlayScreen.opening;
 
-/**
- * Created by Neil on 4/23/2016.
- */
+
 public final class OpeningBook{
 
     private OpeningBook(){}

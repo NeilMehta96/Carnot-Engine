@@ -14,9 +14,6 @@ import java.util.HashSet;
 
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
 
-/**
- * Created by Neil on 4/21/2016.
- */
 public final class AI {
 
 

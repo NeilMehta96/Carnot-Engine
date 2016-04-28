@@ -15,14 +15,9 @@ import com.nmehta.carnotengine.boardstate.Position.ChessPieces;
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
 import com.nmehta.carnotengine.rules.Rules;
 import com.nmehta.carnotengine.utils.MoveTuple;
-import com.nmehta.carnotengine.utils.PointTuple;
-import com.nmehta.carnotengine.utils.Tree;
 
 import java.util.*;
 
-/**
- * Created by Neil on 4/18/2016.
- */
 public class PlayScreen implements Screen{
     private CarnotEngine game;
     private OrthographicCamera camera;
@@ -60,11 +55,8 @@ public class PlayScreen implements Screen{
 
 
 
-    public static HashMap<List<MoveTuple>,List<Position>> positionHash =
+    private static HashMap<List<MoveTuple>,List<Position>> positionHash =
             new HashMap<List<MoveTuple>,List<Position>>();
-
-    public static String opening;
-
 
 
     public PlayScreen(CarnotEngine game){

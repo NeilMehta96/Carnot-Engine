@@ -8,9 +8,7 @@ import java.lang.Math;
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces;
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
 
-/**
- * Created by Neil on 4/19/2016.
- */
+
 
 public class Rules {
 

@@ -1,17 +1,13 @@
 package com.nmehta.carnotengine.boardstate;
 
 import com.nmehta.carnotengine.utils.MoveTuple;
-import com.nmehta.carnotengine.utils.PointTuple;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
 
-/**
- * Created by Neil on 4/21/2016.
- */
+
 public class Position implements Comparable<Position> {
 
 

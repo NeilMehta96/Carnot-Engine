@@ -2,14 +2,9 @@ package com.nmehta.carnotengine.utils;
 
 import com.nmehta.carnotengine.ai.AI;
 import com.nmehta.carnotengine.boardstate.Position;
-import com.nmehta.carnotengine.rules.Rules;
-import com.nmehta.carnotengine.screens.PlayScreen;
 
 import java.util.*;
 
-/**
- * Created by Neil on 4/21/2016.
- */
 public class Tree {
 
     public Position root;
