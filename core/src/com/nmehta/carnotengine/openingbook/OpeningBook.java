@@ -16,7 +16,7 @@ public final class OpeningBook{
 
     public static MoveTuple opening(Position position) {
         int moveNum = position.halfMoveNumber;
-        if (moveNum == 1 && position.whitePieces[3][4] == wpawn) {
+        if (moveNum == 1 && position.whitePieces[28] == wpawn) {
             double c5 = 680618;
             double e5 = 387670;
             double e6 = 217369;
@@ -26,15 +26,15 @@ public final class OpeningBook{
 //            double rand = 0.1;
             double rand = Math.random();
             if (rand < c5 / sumGames) {
-                return new MoveTuple(new PointTuple(2, 6), new PointTuple(2, 4));
+                return new MoveTuple(50, 34);
             } else if (rand < (c5 + e5) / sumGames) {
-                return new MoveTuple(new PointTuple(4, 6), new PointTuple(4, 4));
+                return new MoveTuple(52, 36);
             } else if (rand < (c5 + e5 + e6) / sumGames) {
-                return new MoveTuple(new PointTuple(4, 6), new PointTuple(4, 5));
+                return new MoveTuple(52, 44);
             } else if (rand < (c5 + e5 + e6 + c6) / sumGames) {
-                return new MoveTuple(new PointTuple(2, 6), new PointTuple(2, 5));
+                return new MoveTuple(50, 42);
             } else {
-                return new MoveTuple(new PointTuple(3, 6), new PointTuple(3, 5));
+                return new MoveTuple(51, 43);
             }
         }
         return null;

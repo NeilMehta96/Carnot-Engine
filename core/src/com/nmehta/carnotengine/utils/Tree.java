@@ -31,11 +31,10 @@ public class Tree {
 
 
     public Tree(Position root){
-        this.root = new Position(root);
+        this.root = root;
         List<Position> childList = new ArrayList<Position>();
         for (MoveTuple tuple : AI.generatePositionPossibilities(root)){
-            Position newPos = new Position(this.root);
-            childList.add(newPos.movePiece(tuple));
+            childList.add(this.root.movePiece(tuple));
         }
         Collections.sort(childList);
 

@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
-import static com.nmehta.carnotengine.boardstate.Position.scorePositionPST;
 
 /**
  * Created by Neil on 4/21/2016.
@@ -109,7 +108,7 @@ public final class AI {
 
     private static TreeNodeReturn negamax(Tree tree, int depth, int color) {
         if (depth == 0) {
-            return new TreeNodeReturn(color * scorePositionPST(tree.root), tree.root);
+            //return new TreeNodeReturn(color *tree.root.score, tree.root);
         }
 
         TreeNodeReturn bestValue = new TreeNodeReturn(-40000, null);
@@ -132,7 +131,7 @@ public final class AI {
         int bestScore = -40000;
         int score;
         for (MoveTuple tuple : moves) {
-            score = scorePositionPST(new Position(position).movePiece(tuple));
+            score = position.score;
             if (bestScore < score) {
                 bestMove = tuple;
                 bestScore = score;
@@ -247,86 +246,85 @@ public final class AI {
 
     public static HashSet<MoveTuple> generatePositionPossibilities(Position position) {
         HashSet<MoveTuple> moves = new HashSet<MoveTuple>();
-        for (int i = 0; i <= 7; i++) {
-            for (int j = 0; j <= 7; j++) {
-                if (!position.whitesMove && position.blackPieces[j][i] != empty) {
-                    moves.addAll(generateMovePossibilities(new PointTuple(i, j), position));
-                } else if (position.whitesMove && position.whitePieces[j][i] != empty) {
-                    moves.addAll(generateMovePossibilities(new PointTuple(i, j), position));
-                }
+        for (int i = 0; i <= 63; i++) {
+            if (!position.whitesMove && position.blackPieces[i] != empty) {
+                moves.addAll(generateMovePossibilities(i, position));
+            } else if (position.whitesMove && position.whitePieces[i] != empty) {
+                moves.addAll(generateMovePossibilities(i, position));
             }
         }
         return moves;
     }
 
-    private static HashSet<MoveTuple> generateMovePossibilities(PointTuple from, Position position) {
+    private static HashSet<MoveTuple> generateMovePossibilities(int from, Position position) {
 
-        Position.ChessPieces piece = position.allPieces[from.y][from.x];
-        HashSet<PointTuple> moves = new HashSet<PointTuple>();
+        Position.ChessPieces piece = position.allPieces[from];
+        HashSet<Integer> moves = new HashSet<Integer>();
 
         if (piece == bpawn) {
-            moves.add(new PointTuple(from.x, from.y - 2));
-            moves.add(new PointTuple(from.x, from.y - 1));
-            moves.add(new PointTuple(from.x - 1, from.y - 1));
-            moves.add(new PointTuple(from.x + 1, from.y - 1));
+            moves.add(from-16);
+            moves.add(from-8);
+            moves.add(from-7);
+            moves.add(from-9);
         }
         if (piece == wpawn) {
-            moves.add(new PointTuple(from.x, from.y + 2));
-            moves.add(new PointTuple(from.x, from.y + 1));
-            moves.add(new PointTuple(from.x - 1, from.y + 1));
-            moves.add(new PointTuple(from.x + 1, from.y + 1));
+            moves.add(from+16);
+            moves.add(from+8);
+            moves.add(from+7);
+            moves.add(from+9);
         } else if (piece == brook || piece == wrook) {
             for (int i = 0; i <= 7; i++) {
-                moves.add(new PointTuple(from.x, i));
-                moves.add(new PointTuple(i, from.y));
+                moves.add((from/8)*8+i);
+                moves.add(from%8+i*8);
             }
         } else if (piece == bknight || piece == wknight) {
-            moves.add(new PointTuple(from.x + 1, from.y - 2));
-            moves.add(new PointTuple(from.x - 1, from.y - 2));
-            moves.add(new PointTuple(from.x + 1, from.y + 2));
-            moves.add(new PointTuple(from.x - 1, from.y + 2));
-            moves.add(new PointTuple(from.x + 2, from.y - 1));
-            moves.add(new PointTuple(from.x - 2, from.y - 1));
-            moves.add(new PointTuple(from.x + 2, from.y + 1));
-            moves.add(new PointTuple(from.x - 2, from.y + 1));
+            moves.add(from+6);
+            moves.add(from+15);
+            moves.add(from+17);
+            moves.add(from+10);
+            moves.add(from-6);
+            moves.add(from-15);
+            moves.add(from-17);
+            moves.add(from-10);
         } else if (piece == bbishop || piece == wbishop) {
             for (int i = -7; i <= 7; i++) {
-                moves.add(new PointTuple(from.x + i, from.y + i));
-                moves.add(new PointTuple(from.x + i, from.y - i));
+                moves.add(from+i*9);
+                moves.add(from+i*7);
             }
         } else if (piece == bqueen || piece == wqueen) {
             for (int i = -7; i <= 7; i++) {
-                moves.add(new PointTuple(from.x + i, from.y + i));
-                moves.add(new PointTuple(from.x + i, from.y - i));
+                moves.add(from+i*9);
+                moves.add(from+i*7);
             }
             for (int i = 0; i <= 7; i++) {
-                moves.add(new PointTuple(from.x, i));
-                moves.add(new PointTuple(i, from.y));
+                moves.add((from/8)*8+i);
+                moves.add(from%8+i*8);
             }
         } else if (piece == bking || piece == wking) {
-            moves.add(new PointTuple(from.x + 1, from.y));
-            moves.add(new PointTuple(from.x + 1, from.y + 1));
-            moves.add(new PointTuple(from.x, from.y + 1));
-            moves.add(new PointTuple(from.x - 1, from.y + 1));
-            moves.add(new PointTuple(from.x - 1, from.y));
-            moves.add(new PointTuple(from.x - 1, from.y - 1));
-            moves.add(new PointTuple(from.x, from.y - 1));
-            moves.add(new PointTuple(from.x + 1, from.y - 1));
+            moves.add(from+1);
+            moves.add(from+7);
+            moves.add(from+8);
+            moves.add(from+9);
+            moves.add(from-1);
+            moves.add(from-7);
+            moves.add(from-8);
+            moves.add(from-9);
             if ((piece == wking && position.whiteCanCastle) || (piece == bking && position.blackCanCastle)) {
-                moves.add(new PointTuple(from.x + 2, from.y));
-                moves.add(new PointTuple(from.x - 2, from.y));
+                System.out.println("this happens");
+                moves.add(from+2);
+                moves.add(from-2);
             }
         }
 
         return pairLegalMoves(from, moves, position);
     }
 
-    private static HashSet<MoveTuple> pairLegalMoves(PointTuple from, HashSet<PointTuple> moves, Position position) {
+    private static HashSet<MoveTuple> pairLegalMoves(int from, HashSet<Integer> moves, Position position) {
         HashSet<MoveTuple> pairedMoves = new HashSet<MoveTuple>();
         MoveTuple toAdd;
-        for (PointTuple tuple : moves) {
-            toAdd = new MoveTuple(from, tuple);
-            if (tuple.x >= 0 && tuple.x <= 7 && tuple.y >= 0 && tuple.y <= 7 && Rules.ruleCheck(toAdd, position)) {
+        for (Integer tuple : moves) {
+            toAdd = new MoveTuple(from,tuple);
+            if (tuple>= 0 && tuple <= 63 && Rules.ruleCheck(toAdd, position)) {
                 pairedMoves.add(toAdd);
             }
         }

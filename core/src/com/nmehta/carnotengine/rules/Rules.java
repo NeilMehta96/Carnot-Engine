@@ -2,7 +2,6 @@ package com.nmehta.carnotengine.rules;
 
 import com.nmehta.carnotengine.boardstate.Position;
 import com.nmehta.carnotengine.utils.MoveTuple;
-import com.nmehta.carnotengine.utils.PointTuple;
 
 import java.lang.Math;
 
@@ -18,21 +17,21 @@ public class Rules {
     public static boolean ruleCheck(MoveTuple move, Position position) {
         ChessPieces fromPiece;
         if (position.whitesMove) {
-            if (position.whitePieces[move.from.y][move.from.x] == empty) {
+            if (position.whitePieces[move.from] == empty) {
                 return false;
             }
-            if (position.whitePieces[move.to.y][move.to.x] != empty) {
+            if (position.whitePieces[move.to] != empty) {
                 return false;
             }
-            fromPiece = position.whitePieces[move.from.y][move.from.x];
+            fromPiece = position.whitePieces[move.from];
         } else {
-            if (position.blackPieces[move.from.y][move.from.x] == empty) {
+            if (position.blackPieces[move.from] == empty) {
                 return false;
             }
-            if (position.blackPieces[move.to.y][move.to.x] != empty) {
+            if (position.blackPieces[move.to] != empty) {
                 return false;
             }
-            fromPiece = position.blackPieces[move.from.y][move.from.x];
+            fromPiece = position.blackPieces[move.from];
         }
 
         if (fromPiece == wpawn) {
@@ -59,7 +58,7 @@ public class Rules {
     private static boolean notInCheck(MoveTuple move, Position oldPosition) {
 
         Position position = new Position(oldPosition);
-        position.movePiece(move);
+        position = position.movePiece(move);
         return notInCheck(position);
 
     }
@@ -68,19 +67,13 @@ public class Rules {
         position.checkForCheck = false;
         boolean moveAllowed = false;
         int i = 0;
-        int j = 0;
-        while (!moveAllowed && i <= 7) {
-            while (!moveAllowed && j <= 7) {
-                if (position.whitesMove) {
-                    moveAllowed = Rules.ruleCheck(new MoveTuple(new PointTuple(i, j), position.blackKingPos), position);
-                } else {
-                    moveAllowed = Rules.ruleCheck(new MoveTuple(new PointTuple(i, j), position.whiteKingPos), position);
-                }
-                j++;
-
+        while (!moveAllowed && i <= 63) {
+            if (position.whitesMove) {
+                moveAllowed = Rules.ruleCheck(new MoveTuple(i, position.blackKingPos), position);
+            } else {
+                moveAllowed = Rules.ruleCheck(new MoveTuple(i, position.whiteKingPos), position);
             }
             i++;
-            j = 0;
         }
         return !moveAllowed;
     }
@@ -89,23 +82,23 @@ public class Rules {
     private static boolean whitePawnRuleCheck(MoveTuple move, Position position) {
 
         //TODO: implement En Passant
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
         boolean moveAllowed = false;
-        if (to.x == from.x && to.y - 2 == from.y && from.y == 1 && position.allPieces[to.y][to.x] == empty && position.allPieces[to.y - 1][to.x] == empty) {
+        if (to%8 == from%8 && to/8 - 2 == from/8 && from/8 == 1 && position.allPieces[to] == empty && position.allPieces[to-8] == empty) {
             moveAllowed = true;
-        } else if (to.x == from.x && to.y - 1 == from.y && position.allPieces[to.y][to.x] == empty) {
+        } else if (to%8 == from%8 && to/8 - 1 == from/8 && position.allPieces[to] == empty) {
             moveAllowed = true;
 
-        } else if ((!position.doublePawnMove) && (to.y - 1 == from.y && ((to.x - 1 == from.x || to.x + 1 == from.x) && position.blackPieces[to.y][to.x] != empty))) {
+        } else if ((!position.doublePawnMove) && (to/8 - 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8) && position.blackPieces[to] != empty))) {
             moveAllowed = true;
         }
         /**
-         else if (state.doublePawnMove&&from.y==state.enPassant.y&&to.y-1==from.y&&to.x==state.enPassant.x&&
-         (to.x-1==from.x||to.x+1==from.x)){
+         else if (state.doublePawnMove&&from/8==state.enPassant/8&&to/8-1==from/8&&to%8==state.enPassant%8&&
+         (to%8-1==from%8||to%8+1==from%8)){
          moveAllowed = whiteNotInCheck(to,allPieces,whitePieces,state,blackPieces);
          if (moveAllowed) {
-         blackPieces[to.y - 1][to.x] = empty;
+         blackPieces[to/8 - 1][to%8] = empty;
 
          }
          }
@@ -121,24 +114,24 @@ public class Rules {
     private static boolean blackPawnRuleCheck(MoveTuple move, Position position) {
 
         //TODO: implement En Passant
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
         boolean moveAllowed = false;
-        if (to.x == from.x && to.y + 2 == from.y && from.y == 6 && position.allPieces[to.y][to.x] == empty && position.allPieces[to.y + 1][to.x] == empty) {
+        if (to%8 == from%8 && to/8 + 2 == from/8 && from/8 == 6 && position.allPieces[to] == empty && position.allPieces[to+8] == empty) {
             moveAllowed = true;
-        } else if (to.x == from.x && to.y + 1 == from.y && position.allPieces[to.y][to.x] == empty) {
+        } else if (to%8 == from%8 && to/8 + 1 == from/8 && position.allPieces[to] == empty) {
             moveAllowed = true;
 
-        } else if ((!position.doublePawnMove) && (to.y + 1 == from.y && ((to.x - 1 == from.x || to.x + 1 == from.x) && position.whitePieces[to.y][to.x] != empty))) {
+        } else if ((!position.doublePawnMove) && (to/8 + 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8) && position.whitePieces[to] != empty))) {
             moveAllowed = true;
 
         }
         /**
-         else if (state.doublePawnMove&&from.y==state.enPassant.y&&to.y-1==from.y&&to.x==state.enPassant.x&&
-         (to.x-1==from.x||to.x+1==from.x)){
+         else if (state.doublePawnMove&&from/8==state.enPassant/8&&to/8-1==from/8&&to%8==state.enPassant%8&&
+         (to%8-1==from%8||to%8+1==from%8)){
          moveAllowed = whiteNotInCheck(to,allPieces,whitePieces,state,blackPieces);
          if (moveAllowed) {
-         blackPieces[to.y - 1][to.x] = empty;
+         blackPieces[to/8 - 1][to%8] = empty;
 
          }
          }
@@ -151,26 +144,26 @@ public class Rules {
     }
 
     private static boolean rookRuleCheck(MoveTuple move, Position position) {
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
         boolean moveAllowed = false;
-        if (to.x != from.x ^ to.y != from.y) {
+        if (to%8 != from%8 ^ to/8 != from/8) {
             moveAllowed = true;
         }
         if (moveAllowed) {
             moveAllowed = false;
-            if (to.x == from.x) {
+            if (to%8 == from%8) {
                 int direction;
-                if (to.y > from.y) {
-                    direction = 1;
+                if (to/8 > from/8) {
+                    direction = 8;
                 } else {
-                    direction = -1;
+                    direction = -8;
                 }
-                int yIter = from.y + direction;
-                while (position.allPieces[yIter][to.x] == empty && yIter != to.y) {
-                    yIter = yIter + direction;
+                int yIter = from + direction;
+                while (position.allPieces[yIter] == empty && yIter/8 != to/8) {
+                    yIter += direction;
                 }
-                if (yIter == to.y) {
+                if (yIter/8 == to/8) {
                     moveAllowed = true;
                     if (position.checkForCheck) {
                         moveAllowed = notInCheck(move, position);
@@ -178,16 +171,16 @@ public class Rules {
                 }
             } else {
                 int direction;
-                if (to.x > from.x) {
+                if (to%8 > from%8) {
                     direction = 1;
                 } else {
                     direction = -1;
                 }
-                int xIter = from.x + direction;
-                while (position.allPieces[to.y][xIter] == empty && xIter != to.x) {
+                int xIter = from + direction;
+                while (position.allPieces[xIter] == empty && xIter%8 != to%8) {
                     xIter = xIter + direction;
                 }
-                if (xIter == to.x) {
+                if (xIter%8 == to%8) {
                     moveAllowed = true;
                     if (position.checkForCheck) {
                         moveAllowed = notInCheck(move, position);
@@ -206,14 +199,14 @@ public class Rules {
     private static boolean knightRuleCheck(MoveTuple move, Position position) {
         /*
         boolean moveAllowed = false;
-        if ((Math.abs(to.x-from.x)+Math.abs(to.y-from.y)==3) && to.x!=from.x && to.y!=from.y){
+        if ((Math.abs(to%8-from%8)+Math.abs(to/8-from/8)==3) && to%8!=from%8 && to/8!=from/8){
             moveAllowed = notInCheck(from,to, allPieces, whitePieces, state, blackPieces);
         }
         return moveAllowed;
         */
-        PointTuple to = move.to;
-        PointTuple from = move.from;
-        boolean moveAllowed = ((Math.abs(to.x - from.x) + Math.abs(to.y - from.y) == 3) && to.x != from.x && to.y != from.y);
+        int to = move.to;
+        int from = move.from;
+        boolean moveAllowed = ((Math.abs(to%8 - from%8) + Math.abs(to/8 - from/8) == 3) && to%8 != from%8 && to/8 != from/8);
         if (moveAllowed && position.checkForCheck) {
             moveAllowed = notInCheck(move, position);
         }
@@ -222,30 +215,28 @@ public class Rules {
 
 
     private static boolean bishopRuleCheck(MoveTuple move, Position position) {
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
         boolean moveAllowed = false;
-        if (Math.abs(to.x - from.x) == Math.abs(to.y - from.y) && to.x != from.x) {
+        if (Math.abs(to%8 - from%8) == Math.abs(to/8 - from/8) && to%8 != from%8) {
 
             int xDir;
             int yDir;
-            if (to.x - from.x >= 1) {
+            if (to%8 - from%8 >= 1) {
                 xDir = 1;
             } else {
                 xDir = -1;
             }
-            if (to.y - from.y >= 1) {
-                yDir = 1;
+            if (to/8 - from/8 >= 1) {
+                yDir = 8;
             } else {
-                yDir = -1;
+                yDir = -8;
             }
-            int xIter = from.x + xDir;
-            int yIter = from.y + yDir;
-            while (position.allPieces[yIter][xIter] == empty && xIter != to.x) {
-                xIter = xIter + xDir;
-                yIter = yIter + yDir;
+            int iter = from + xDir + yDir;
+            while (position.allPieces[iter] == empty && iter != to) {
+                iter += xDir + yDir;
             }
-            if (xIter == to.x) {
+            if (iter == to) {
                 moveAllowed = true;
                 if (position.checkForCheck) {
                     moveAllowed = notInCheck(move, position);
@@ -265,21 +256,21 @@ public class Rules {
     }
 
     private static boolean whiteKingRuleCheck(MoveTuple move, Position position) {
-        PointTuple to = move.to;
-        PointTuple from = move.from;
+        int to = move.to;
+        int from = move.from;
 
-        boolean moveAllowed = ((to.x - from.x) * (to.x - from.x) + (to.y - from.y) * (to.y - from.y) < 4);
+        boolean moveAllowed = ((to%8 - from%8) * (to%8 - from%8) + (to/8 - from/8) * (to/8 - from/8) < 4);
         if (moveAllowed && position.checkForCheck) {
             moveAllowed = notInCheck(move, position);
         }
-        else if (position.whiteCanCastle&&((to.x==2&&position.whitePieces[0][0]==wrook)||(to.x==6&&position.whitePieces[0][7]==wrook))&&to.y==0) {
-            if (to.x == 2) {
-                moveAllowed = position.allPieces[0][1] == empty && position.allPieces[0][2] == empty &&
-                        position.allPieces[0][3] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(3, 0)), position);
+        else if (position.whiteCanCastle&&((to%8==2&&position.whitePieces[0]==wrook)||(to%8==6&&position.whitePieces[7]==wrook))&&to/8==0) {
+            if (to%8 == 2) {
+                moveAllowed = position.allPieces[1] == empty && position.allPieces[2] == empty &&
+                        position.allPieces[3] == empty && notInCheck(move, position)
+                        && notInCheck(new MoveTuple(from, 3), position);
             } else {
-                moveAllowed = position.allPieces[0][5] == empty && position.allPieces[0][6] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(5, 0)), position);
+                moveAllowed = position.allPieces[5] == empty && position.allPieces[6] == empty && notInCheck(move, position)
+                        && notInCheck(new MoveTuple(from, 5), position);
             }
             if (moveAllowed){
                 Position checkPos = new Position(position);
@@ -296,20 +287,20 @@ public class Rules {
     }
 
     private static boolean blackKingRuleCheck(MoveTuple move, Position position) {
-        PointTuple to = move.to;
-        PointTuple from = move.from;
-        boolean moveAllowed = ((to.x - from.x) * (to.x - from.x) + (to.y - from.y) * (to.y - from.y) < 4);
+        int to = move.to;
+        int from = move.from;
+        boolean moveAllowed = ((to%8 - from%8) * (to%8 - from%8) + (to/8 - from/8) * (to/8 - from/8) < 4);
         if (moveAllowed && position.checkForCheck) {
             moveAllowed = notInCheck(move, position);
         }
-        else if (position.blackCanCastle&&((to.x==2&&position.blackPieces[7][0]==brook)||(to.x==6&&position.blackPieces[7][7]==brook))&&to.y==7) {
-            if (to.x == 2) {
-                moveAllowed = position.allPieces[7][1] == empty && position.allPieces[7][2] == empty &&
-                        position.allPieces[7][3] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(3, 7)), position);
+        else if (position.blackCanCastle&&((to%8==2&&position.blackPieces[56]==brook)||(to%8==6&&position.blackPieces[63]==brook))&&to/8==7) {
+            if (to%8 == 2) {
+                moveAllowed = position.allPieces[57] == empty && position.allPieces[58] == empty &&
+                        position.allPieces[59] == empty && notInCheck(move, position)
+                        && notInCheck(new MoveTuple(from, 59), position);
             } else {
-                moveAllowed = position.allPieces[7][5] == empty && position.allPieces[7][6] == empty && notInCheck(move, position)
-                        && notInCheck(new MoveTuple(from, new PointTuple(5, 7)), position);
+                moveAllowed = position.allPieces[61] == empty && position.allPieces[62] == empty && notInCheck(move, position)
+                        && notInCheck(new MoveTuple(from, 61), position);
            }
             if (moveAllowed){
                 Position checkPos = new Position(position);
