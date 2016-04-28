@@ -1,12 +1,12 @@
-package com.nmehta.carnotengine.rules;
+package com.github.neilmehta96.carnotengine.rules;
 
-import com.nmehta.carnotengine.boardstate.Position;
-import com.nmehta.carnotengine.utils.MoveTuple;
+import com.github.neilmehta96.carnotengine.boardstate.Position;
+import com.github.neilmehta96.carnotengine.utils.MoveTuple;
 
 import java.lang.Math;
 
-import static com.nmehta.carnotengine.boardstate.Position.ChessPieces;
-import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
+import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces;
+import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces.*;
 
 
 

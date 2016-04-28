@@ -1,8 +1,8 @@
-package com.nmehta.carnotengine;
+package com.github.neilmehta96.carnotengine;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nmehta.carnotengine.screens.PlayScreen;
+import com.github.neilmehta96.carnotengine.screens.PlayScreen;
 
 public class CarnotEngine extends Game {
 	public SpriteBatch batch;

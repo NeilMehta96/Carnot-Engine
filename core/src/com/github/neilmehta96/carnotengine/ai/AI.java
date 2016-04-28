@@ -1,18 +1,18 @@
-package com.nmehta.carnotengine.ai;
+package com.github.neilmehta96.carnotengine.ai;
 
-import com.nmehta.carnotengine.CarnotEngine;
-import com.nmehta.carnotengine.boardstate.Position;
-import com.nmehta.carnotengine.openingbook.OpeningBook;
-import com.nmehta.carnotengine.rules.Rules;
-import com.nmehta.carnotengine.utils.MoveTuple;
-import com.nmehta.carnotengine.utils.Tree;
-import com.nmehta.carnotengine.utils.TreeNodeReturn;
+import com.github.neilmehta96.carnotengine.CarnotEngine;
+import com.github.neilmehta96.carnotengine.boardstate.Position;
+import com.github.neilmehta96.carnotengine.openingbook.OpeningBook;
+import com.github.neilmehta96.carnotengine.rules.Rules;
+import com.github.neilmehta96.carnotengine.utils.MoveTuple;
+import com.github.neilmehta96.carnotengine.utils.Tree;
+import com.github.neilmehta96.carnotengine.utils.TreeNodeReturn;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
+import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces.*;
 
 public final class AI {
 

@@ -1,7 +1,7 @@
-package com.nmehta.carnotengine.utils;
+package com.github.neilmehta96.carnotengine.utils;
 
-import com.nmehta.carnotengine.ai.AI;
-import com.nmehta.carnotengine.boardstate.Position;
+import com.github.neilmehta96.carnotengine.ai.AI;
+import com.github.neilmehta96.carnotengine.boardstate.Position;
 
 import java.util.*;
 

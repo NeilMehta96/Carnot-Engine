@@ -1,9 +1,9 @@
-package com.nmehta.carnotengine.openingbook;
+package com.github.neilmehta96.carnotengine.openingbook;
 
-import com.nmehta.carnotengine.boardstate.Position;
-import com.nmehta.carnotengine.utils.MoveTuple;
+import com.github.neilmehta96.carnotengine.boardstate.Position;
+import com.github.neilmehta96.carnotengine.utils.MoveTuple;
 
-import static com.nmehta.carnotengine.boardstate.Position.ChessPieces.*;
+import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces.*;
 
 
 public final class OpeningBook{

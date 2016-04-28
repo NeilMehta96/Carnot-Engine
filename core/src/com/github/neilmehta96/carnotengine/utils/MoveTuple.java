@@ -1,4 +1,4 @@
-package com.nmehta.carnotengine.utils;
+package com.github.neilmehta96.carnotengine.utils;
 
 /**
  * Created by Neil on 4/22/2016.
