@@ -1,6 +1,6 @@
-package com.github.neilmehta96.carnotengine.utils;
+package com.github.neilmehta1.carnotengine.utils;
 
-import com.github.neilmehta96.carnotengine.boardstate.Position;
+import com.github.neilmehta1.carnotengine.boardstate.Position;
 
 
 public class TreeNodeReturn {

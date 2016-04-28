@@ -1,8 +1,8 @@
-package com.github.neilmehta96.carnotengine.desktop;
+package com.github.neilmehta1.carnotengine.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.github.neilmehta96.carnotengine.CarnotEngine;
+import com.github.neilmehta1.carnotengine.CarnotEngine;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

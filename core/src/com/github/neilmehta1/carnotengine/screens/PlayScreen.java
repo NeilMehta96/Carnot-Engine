@@ -1,4 +1,4 @@
-package com.github.neilmehta96.carnotengine.screens;
+package com.github.neilmehta1.carnotengine.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.github.neilmehta96.carnotengine.CarnotEngine;
+import com.github.neilmehta1.carnotengine.CarnotEngine;
 
-import com.github.neilmehta96.carnotengine.ai.AI;
-import com.github.neilmehta96.carnotengine.boardstate.Position;
-import com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces;
-import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces.*;
-import com.github.neilmehta96.carnotengine.rules.Rules;
-import com.github.neilmehta96.carnotengine.utils.MoveTuple;
+import com.github.neilmehta1.carnotengine.ai.AI;
+import com.github.neilmehta1.carnotengine.boardstate.Position;
+import com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces;
+import static com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces.*;
+import com.github.neilmehta1.carnotengine.rules.Rules;
+import com.github.neilmehta1.carnotengine.utils.MoveTuple;
 
 import java.util.*;
 

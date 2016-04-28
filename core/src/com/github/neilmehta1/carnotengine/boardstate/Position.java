@@ -1,11 +1,11 @@
-package com.github.neilmehta96.carnotengine.boardstate;
+package com.github.neilmehta1.carnotengine.boardstate;
 
-import com.github.neilmehta96.carnotengine.utils.MoveTuple;
+import com.github.neilmehta1.carnotengine.utils.MoveTuple;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPieces.*;
+import static com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces.*;
 
 
 public class Position implements Comparable<Position> {
