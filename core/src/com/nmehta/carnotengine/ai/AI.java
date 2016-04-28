@@ -35,7 +35,7 @@ public final class AI {
 
             TreeNodeReturn nodeReturn = IDDFS(position);
             System.out.println(nodeReturn.score);
-            return nodeReturn.position.lastMove;
+            return nodeReturn.position.getLastMove();
         } else {
             return toReturn;
         }
@@ -65,9 +65,9 @@ public final class AI {
     private static TreeNodeReturn alphabeta(Tree tree, int depth, int a, int b) {
         if (depth == 0) {
             //return new TreeNodeReturn(scorePositionPST(tree.root),tree.root);
-            return new TreeNodeReturn(tree.root.score, tree.root);
+            return new TreeNodeReturn(tree.root.getScore(), tree.root);
         }
-        if (!tree.root.whitesMove) {
+        if (!tree.root.isWhitesMove()) {
             TreeNodeReturn bestNode = new TreeNodeReturn(-40000, null);
             TreeNodeReturn returnNode;
             for (Position position : tree.children) {
@@ -131,7 +131,7 @@ public final class AI {
         int bestScore = -40000;
         int score;
         for (MoveTuple tuple : moves) {
-            score = position.score;
+            score = position.getScore();
             if (bestScore < score) {
                 bestMove = tuple;
                 bestScore = score;
@@ -247,9 +247,9 @@ public final class AI {
     public static HashSet<MoveTuple> generatePositionPossibilities(Position position) {
         HashSet<MoveTuple> moves = new HashSet<MoveTuple>();
         for (int i = 0; i <= 63; i++) {
-            if (!position.whitesMove && position.blackPieces[i] != empty) {
+            if (!position.isWhitesMove() && position.getBlackPieces()[i] != empty) {
                 moves.addAll(generateMovePossibilities(i, position));
-            } else if (position.whitesMove && position.whitePieces[i] != empty) {
+            } else if (position.isWhitesMove() && position.getWhitePieces()[i] != empty) {
                 moves.addAll(generateMovePossibilities(i, position));
             }
         }
@@ -258,7 +258,7 @@ public final class AI {
 
     private static HashSet<MoveTuple> generateMovePossibilities(int from, Position position) {
 
-        Position.ChessPieces piece = position.allPieces[from];
+        Position.ChessPieces piece = position.getAllPieces()[from];
         HashSet<Integer> moves = new HashSet<Integer>();
 
         if (piece == bpawn) {
@@ -309,7 +309,7 @@ public final class AI {
             moves.add(from-7);
             moves.add(from-8);
             moves.add(from-9);
-            if ((piece == wking && position.whiteCanCastle) || (piece == bking && position.blackCanCastle)) {
+            if ((piece == wking && position.isWhiteCanCastle()) || (piece == bking && position.isBlackCanCastle())) {
                 moves.add(from+2);
                 moves.add(from-2);
             }
@@ -323,7 +323,7 @@ public final class AI {
         MoveTuple toAdd;
         for (Integer tuple : moves) {
             toAdd = new MoveTuple(from,tuple);
-            if (tuple>= 0 && tuple <= 63 && Rules.ruleCheck(toAdd, position)) {
+            if (tuple>= 0 && tuple <= 63 && Rules.ruleCheck(toAdd, position, true)) {
                 pairedMoves.add(toAdd);
             }
         }

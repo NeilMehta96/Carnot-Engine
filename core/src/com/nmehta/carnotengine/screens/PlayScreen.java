@@ -109,7 +109,7 @@ public class PlayScreen implements Screen{
 
         System.gc();
 
-        if (!CarnotEngine.playerMovesBlack&&!currentPosition.whitesMove){
+        if (!CarnotEngine.playerMovesBlack&&!currentPosition.isWhitesMove()){
 
             currentPosition.recentMoves = new LinkedList<MoveTuple>();
             double start = System.currentTimeMillis();
@@ -141,8 +141,8 @@ public class PlayScreen implements Screen{
             int touch = getIdx(camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0),
                     viewport.getScreenX(),viewport.getScreenY(), viewport.getScreenWidth(),viewport.getScreenHeight()));
             if (touch>=0&& touch<=63) {
-                if (((currentPosition.whitesMove && currentPosition.whitePieces[touch] != empty) ||
-                        (CarnotEngine.playerMovesBlack && !currentPosition.whitesMove && currentPosition.blackPieces[touch] != empty))) {
+                if (((currentPosition.isWhitesMove() && currentPosition.getWhitePieces()[touch] != empty) ||
+                        (CarnotEngine.playerMovesBlack && !currentPosition.isWhitesMove() && currentPosition.getBlackPieces()[touch] != empty))) {
                     if (isTouched && lastTouch%8 == touch%8 && lastTouch/8 == touch/8) {
                         isTouched = false;
                     } else {
@@ -152,9 +152,9 @@ public class PlayScreen implements Screen{
 
                 } else if (isTouched) {
                     MoveTuple move = new MoveTuple(lastTouch,touch);
-                    if (Rules.ruleCheck(move, currentPosition)) {
+                    if (Rules.ruleCheck(move, currentPosition, true)) {
                         currentPosition = currentPosition.movePiece(move);
-                        prevMove = currentPosition.lastMove;
+                        prevMove = currentPosition.getLastMove();
                     }
                     isTouched = false;
                 }
@@ -173,8 +173,8 @@ public class PlayScreen implements Screen{
                 else {
                     game.batch.draw(whiteSquare,i-4,j-4,1,1);
                 }
-                if(currentPosition.allPieces[j*8+i]!=empty) {
-                    game.batch.draw(findTexture(currentPosition.allPieces[j*8+i]), i - 4, j - 4, 1, 1);
+                if(currentPosition.getAllPieces()[j*8+i]!=empty) {
+                    game.batch.draw(findTexture(currentPosition.getAllPieces()[j*8+i]), i - 4, j - 4, 1, 1);
                 }
             }
         }
@@ -192,7 +192,7 @@ public class PlayScreen implements Screen{
             else {
                 game.batch.draw(previousWhiteSquare, prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
             }
-            game.batch.draw(findTexture(currentPosition.allPieces[prevMove.to]),prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
+            game.batch.draw(findTexture(currentPosition.getAllPieces()[prevMove.to]),prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
 
         }
 
@@ -203,7 +203,7 @@ public class PlayScreen implements Screen{
             else {
                 game.batch.draw(selectedWhiteSquare,lastTouch%8-4,lastTouch/8-4,1,1);
             }
-            game.batch.draw(findTexture(currentPosition.allPieces[lastTouch]),lastTouch%8-4,lastTouch/8-4,1,1);
+            game.batch.draw(findTexture(currentPosition.getAllPieces()[lastTouch]),lastTouch%8-4,lastTouch/8-4,1,1);
         }
         game.batch.end();
 

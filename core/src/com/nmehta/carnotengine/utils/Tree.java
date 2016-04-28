@@ -38,7 +38,7 @@ public class Tree {
         }
         Collections.sort(childList);
 
-        if (!root.whitesMove) {
+        if (!root.isWhitesMove()) {
             Collections.reverse(childList);
         }
         children = childList;

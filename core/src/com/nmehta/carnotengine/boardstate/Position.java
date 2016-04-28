@@ -48,22 +48,22 @@ public class Position implements Comparable<Position> {
     private static int[] wkingEndPST = new int[64];
 
 
-    public ChessPieces[] allPieces = new ChessPieces[64];
-    public ChessPieces[] whitePieces = new ChessPieces[64];
-    public ChessPieces[] blackPieces = new ChessPieces[64];
-    public boolean whiteCanCastle = true;
-    public boolean blackCanCastle = true;
-    public int enPassant;
-    public boolean doublePawnMove = false;
-    public boolean whitesMove = true;
-    public int blackKingPos = 60;
-    public int whiteKingPos = 4;
-    public boolean checkForCheck = true;
-    public MoveTuple lastMove;
-    public int score = 0;
-    public int halfMoveNumber = 0;
+    private ChessPieces[] allPieces = new ChessPieces[64];
+    private ChessPieces[] whitePieces = new ChessPieces[64];
+    private ChessPieces[] blackPieces = new ChessPieces[64];
+    private boolean whiteCanCastle = true;
+    private boolean blackCanCastle = true;
+    private int enPassant;
+    private boolean doublePawnMove = false;
+    private boolean whitesMove = true;
+    private int blackKingPos = 60;
+    private int whiteKingPos = 4;
+    private MoveTuple lastMove;
+    private int score = 0;
+    private int halfMoveNumber = 0;
+    private List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
 
-    public List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
+
     public List<MoveTuple> recentMoves = new LinkedList<MoveTuple>();
 
 
@@ -78,7 +78,6 @@ public class Position implements Comparable<Position> {
         this.doublePawnMove = position.doublePawnMove;
         this.blackKingPos = position.blackKingPos;
         this.whiteKingPos = position.whiteKingPos;
-        this.checkForCheck = position.checkForCheck;
         if (position.lastMove != null) {
             this.lastMove = position.lastMove;
         }
@@ -86,6 +85,11 @@ public class Position implements Comparable<Position> {
         this.halfMoveNumber = position.halfMoveNumber;
         this.moveList = copyList(position.moveList);
         this.recentMoves = copyList(position.recentMoves);
+    }
+
+    public Position(Position position, boolean setWhitesMoveTo){
+        this(position);
+        this.whitesMove = setWhitesMoveTo;
     }
 
     public Position(){
@@ -585,6 +589,63 @@ public class Position implements Comparable<Position> {
             toReturn[i] = whiteTable[63-i];
         }
         return toReturn;
+    }
+
+
+    public int getWhiteKingPos() {
+        return whiteKingPos;
+    }
+
+    public int getBlackKingPos() {
+        return blackKingPos;
+    }
+
+    public boolean isWhitesMove() {
+        return whitesMove;
+    }
+
+    public boolean isDoublePawnMove() {
+        return doublePawnMove;
+    }
+
+    public int getEnPassant() {
+        return enPassant;
+    }
+
+    public boolean isBlackCanCastle() {
+        return blackCanCastle;
+    }
+
+    public boolean isWhiteCanCastle() {
+        return whiteCanCastle;
+    }
+
+    public ChessPieces[] getWhitePieces() {
+        return whitePieces;
+    }
+
+    public ChessPieces[] getBlackPieces() {
+        return blackPieces;
+    }
+
+    public ChessPieces[] getAllPieces() {
+        return allPieces;
+    }
+
+    public MoveTuple getLastMove() {
+        return lastMove;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getHalfMoveNumber() {
+        return halfMoveNumber;
+    }
+
+    public List<MoveTuple> getMoveList() {
+        return moveList;
     }
 
 }

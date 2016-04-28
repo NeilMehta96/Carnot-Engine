@@ -16,8 +16,8 @@ public final class OpeningBook{
     private OpeningBook(){}
 
     public static MoveTuple opening(Position position) {
-        int moveNum = position.halfMoveNumber;
-        if (moveNum == 1 && position.whitePieces[28] == wpawn) {
+        int moveNum = position.getHalfMoveNumber();
+        if (moveNum == 1 && position.getWhitePieces()[28] == wpawn) {
             double c5 = 680618;
             double e5 = 387670;
             double e6 = 217369;
@@ -38,8 +38,8 @@ public final class OpeningBook{
                 return new MoveTuple(51, 43);
             }
         }
-        else if (moveNum==3&&position.whitePieces[28] == wpawn&&position.blackPieces[34] == bpawn){
-            if (position.whitePieces[21]==wknight){
+        else if (moveNum==3&&position.getWhitePieces()[28] == wpawn&&position.getBlackPieces()[34] == bpawn){
+            if (position.getWhitePieces()[21]==wknight){
                 double d6 = 205376;
                 double Nc6 = 161170;
                 double e6 = 120816;
@@ -61,7 +61,7 @@ public final class OpeningBook{
 
             }
 
-            else if (position.whitePieces[18]==wknight){
+            else if (position.getWhitePieces()[18]==wknight){
                 double Nc6 = 46382;
                 double e6 = 11460;
                 double d6 = 11009;
@@ -82,7 +82,7 @@ public final class OpeningBook{
                 }
             }
 
-            else if (position.whitePieces[18]==wpawn){
+            else if (position.getWhitePieces()[18]==wpawn){
                 double d5 = 19562;
                 double Nf6 = 17894;
                 double e6 = 5179;
@@ -102,7 +102,7 @@ public final class OpeningBook{
                     return new MoveTuple(54, 46);
                 }
             }
-            else if (position.whitePieces[27]==wpawn){
+            else if (position.getWhitePieces()[27]==wpawn){
                 double cxd4 = 11772;
                 double e6 = 283;
                 double g6 = 57;
@@ -117,7 +117,7 @@ public final class OpeningBook{
                 }
             }
 
-            else if (position.whitePieces[29]==wpawn){
+            else if (position.getWhitePieces()[29]==wpawn){
                 double Nc6 = 2394;
                 double d5 = 1836;
                 double e6 = 1399;
@@ -140,9 +140,9 @@ public final class OpeningBook{
 
 
         }
-        else if (moveNum==5&&position.whitePieces[28] == wpawn&&position.blackPieces[34] == bpawn
-                &&position.whitePieces[21]==wknight&&position.blackPieces[43]==bpawn) {
-            if (position.whitePieces[27] == wpawn) {
+        else if (moveNum==5&&position.getWhitePieces()[28] == wpawn&&position.getBlackPieces()[34] == bpawn
+                &&position.getWhitePieces()[21]==wknight&&position.getBlackPieces()[43]==bpawn) {
+            if (position.getWhitePieces()[27] == wpawn) {
                 double cxd4 = 156000;
                 double Nf6 = 6212;
                 double sumGames = cxd4 + Nf6;
@@ -155,11 +155,11 @@ public final class OpeningBook{
 
             }
         }
-        else if (moveNum==7&&position.whitePieces[27]==wknight&&position.whitePieces[28]==wpawn&&position.blackPieces[43]==bpawn){
+        else if (moveNum==7&&position.getWhitePieces()[27]==wknight&&position.getWhitePieces()[28]==wpawn&&position.getBlackPieces()[43]==bpawn){
             return new MoveTuple(62,45);
         }
-        else if (moveNum==9&&position.whitePieces[27]==wknight&&position.whitePieces[28]==wpawn&&position.blackPieces[43]==bpawn
-                &&position.blackPieces[45]==bknight&&position.whitePieces[18]==wknight){
+        else if (moveNum==9&&position.getWhitePieces()[27]==wknight&&position.getWhitePieces()[28]==wpawn&&position.getBlackPieces()[43]==bpawn
+                &&position.getBlackPieces()[45]==bknight&&position.getWhitePieces()[18]==wknight){
             double a6 = 84021;
             double g6 = 33871;
             double Nc6 = 21513;
