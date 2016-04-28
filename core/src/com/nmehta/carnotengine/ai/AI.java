@@ -34,6 +34,7 @@ public final class AI {
 //            return abReturn.position.lastMove;
 
             TreeNodeReturn nodeReturn = IDDFS(position);
+            System.out.println(nodeReturn.score);
             return nodeReturn.position.lastMove;
         } else {
             return toReturn;
