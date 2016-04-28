@@ -211,7 +211,6 @@ public class Position implements Comparable<Position> {
             piece = position.blackPieces[from];
             scoreTable = getTable(piece);
             position.score += scoreTable[to]-scoreTable[from];
-
             if (position.blackPieces[from] == bking) {
                 position.blackKingPos = to;
 
@@ -335,7 +334,7 @@ public class Position implements Comparable<Position> {
             }
         }
         else {
-            return null;
+            throw new RuntimeException("empty piece returned");
         }
     }
 
