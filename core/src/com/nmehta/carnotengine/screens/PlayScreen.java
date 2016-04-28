@@ -115,6 +115,7 @@ public class PlayScreen implements Screen{
             positionHash = new HashMap<List<MoveTuple>,List<Position>>();
 
             System.out.println((end-start)/1000);
+            System.out.println(currentPosition.score);
 //            System.out.println(currentPosition.halfMoveNumber);
 //            System.out.println(currentPosition.allPieces[6][2]);
 //            System.out.println(prevMove.from.x);

@@ -6,7 +6,6 @@ import com.nmehta.carnotengine.openingbook.OpeningBook;
 import com.nmehta.carnotengine.rules.Rules;
 import com.nmehta.carnotengine.utils.MoveTuple;
 import com.nmehta.carnotengine.utils.Tree;
-import com.nmehta.carnotengine.utils.PointTuple;
 import com.nmehta.carnotengine.utils.TreeNodeReturn;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public final class AI {
 
     private static TreeNodeReturn IDDFS(Position position) {
         TreeNodeReturn bestSoFar = new TreeNodeReturn(-40000, null);
-        for (int depth = 1; depth <= CarnotEngine.depthOfSearch; depth++) {
+        for (int depth = CarnotEngine.depthOfSearch; depth <= CarnotEngine.depthOfSearch; depth++) {
 //            if (PlayScreen.positionHash.containsKey(position.moveList)) {
 //                System.out.println("hashing happens");
 //                bestSoFar = alphabeta(new Tree(position, PlayScreen.positionHash.get(position.moveList)), depth, -40000, 40000);
