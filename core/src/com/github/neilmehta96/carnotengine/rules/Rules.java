@@ -12,6 +12,8 @@ import static com.github.neilmehta96.carnotengine.boardstate.Position.ChessPiece
 
 public class Rules {
 
+    private Rules(){}
+
     public static boolean ruleCheck(MoveTuple move, Position position, boolean checkForCheck) {
         ChessPieces fromPiece;
         if (position.isWhitesMove()) {
