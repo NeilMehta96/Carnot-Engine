@@ -42,6 +42,7 @@ public final class OpeningBook{
                 double a6 = 7892;
                 double sumGames = d6 + Nc6 + e6 + g6 + a6;
                 double rand = Math.random();
+//                double rand = .999999;
                 if (rand < d6 / sumGames) {
                     return new MoveTuple(51,43);
                 } else if (rand < (d6 + Nc6) / sumGames) {

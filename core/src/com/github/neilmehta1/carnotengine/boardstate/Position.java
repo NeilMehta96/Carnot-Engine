@@ -58,6 +58,12 @@ public class Position implements Comparable<Position> {
     private List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
     private int enPassant;
 
+
+    private boolean A1RookMoved = false;
+    private boolean H1RookMoved = false;
+    private boolean A8RookMoved = false;
+    private boolean H8RookMoved = false;
+
     public List<MoveTuple> recentMoves = new LinkedList<MoveTuple>();
 
 
@@ -78,6 +84,10 @@ public class Position implements Comparable<Position> {
         this.halfMoveNumber = position.halfMoveNumber;
         this.moveList = copyList(position.moveList);
         this.recentMoves = copyList(position.recentMoves);
+        this.A1RookMoved = position.A1RookMoved;
+        this.H1RookMoved = position.H1RookMoved;
+        this.A8RookMoved = position.A8RookMoved;
+        this.H8RookMoved = position.H8RookMoved;
     }
 
     public Position(Position position, boolean setWhitesMoveTo){
@@ -103,14 +113,13 @@ public class Position implements Comparable<Position> {
         int[] scoreTable;
         position.lastMove = move;
 
-
         if (position.whitesMove) {
             piece = position.whitePieces[from];
             scoreTable = getTable(piece);
             position.score -= scoreTable[to]-scoreTable[from];
 
-            if (piece == wpawn && (from+7==to||from+9==to)&&position.blackPieces[to]==empty){
-                position.score -= getTable(blackPieces[to-8])[to-8];
+            if (piece == wpawn && (from+7==to||from+9==to)&&position.enPassant!=-2&&position.blackPieces[to]==empty){
+                position.score -= getTable(position.blackPieces[to-8])[to-8];
                 position.blackPieces[to-8]=empty;
                 position.allPieces[to-8]=empty;
             }
@@ -119,7 +128,7 @@ public class Position implements Comparable<Position> {
                 position.enPassant = to;
             }
             else {
-                position.enPassant = -1;
+                position.enPassant = -2;
             }
 
             if (position.whitePieces[from] == wking) {
@@ -171,8 +180,8 @@ public class Position implements Comparable<Position> {
             scoreTable = getTable(piece);
             position.score += scoreTable[to]-scoreTable[from];
 
-            if (piece == bpawn && (from-7==to||from-9==to)&&position.whitePieces[to]==empty){
-                position.score += getTable(whitePieces[to+8])[to+8];
+            if (piece == bpawn && (from-7==to||from-9==to)&&position.enPassant!=-2&&position.whitePieces[to]==empty){
+                position.score += getTable(position.whitePieces[to+8])[to+8];
                 position.whitePieces[to+8]=empty;
                 position.allPieces[to+8]=empty;
             }
@@ -181,7 +190,7 @@ public class Position implements Comparable<Position> {
                 position.enPassant = to;
             }
             else {
-                position.enPassant = -1;
+                position.enPassant = -2;
             }
 
             if (position.blackPieces[from] == bking) {
@@ -224,6 +233,20 @@ public class Position implements Comparable<Position> {
             position.blackPieces[from] = empty;
             position.allPieces[from] = empty;
         }
+
+        if (position.whitePieces[0]!=wrook){
+            position.A1RookMoved = true;
+        }
+        if (position.whitePieces[7]!=wrook){
+            position.H1RookMoved = true;
+        }
+        if (position.blackPieces[56]!=brook){
+            position.A8RookMoved = true;
+        }
+        if (position.blackPieces[63]!=brook){
+            position.H8RookMoved = true;
+        }
+
         position.whitesMove = !position.whitesMove;
         position.halfMoveNumber++;
         position.moveList.add(move);
@@ -610,5 +633,20 @@ public class Position implements Comparable<Position> {
 
     public int getEnPassant() {return enPassant;}
 
+    public boolean isA1RookMoved() {
+        return A1RookMoved;
+    }
+
+    public boolean isH1RookMoved() {
+        return H1RookMoved;
+    }
+
+    public boolean isA8RookMoved() {
+        return A8RookMoved;
+    }
+
+    public boolean isH8RookMoved() {
+        return H8RookMoved;
+    }
 
 }
