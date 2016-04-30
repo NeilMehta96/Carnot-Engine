@@ -49,8 +49,6 @@ public class Position implements Comparable<Position> {
     private ChessPieces[] blackPieces = new ChessPieces[64];
     private boolean whiteCanCastle = true;
     private boolean blackCanCastle = true;
-    private int enPassant;
-    private boolean doublePawnMove = false;
     private boolean whitesMove = true;
     private int blackKingPos = 60;
     private int whiteKingPos = 4;
@@ -58,7 +56,7 @@ public class Position implements Comparable<Position> {
     private int score = 0;
     private int halfMoveNumber = 0;
     private List<MoveTuple> moveList = new LinkedList<MoveTuple>(); // last in list is most recent move.
-
+    private int enPassant;
 
     public List<MoveTuple> recentMoves = new LinkedList<MoveTuple>();
 
@@ -71,7 +69,6 @@ public class Position implements Comparable<Position> {
         this.blackCanCastle = position.blackCanCastle;
         this.enPassant = position.enPassant;
         this.whitesMove = position.whitesMove;
-        this.doublePawnMove = position.doublePawnMove;
         this.blackKingPos = position.blackKingPos;
         this.whiteKingPos = position.whiteKingPos;
         if (position.lastMove != null) {
@@ -98,59 +95,6 @@ public class Position implements Comparable<Position> {
     @Override
     public int compareTo(Position o) {return ((Integer)score).compareTo(o.score);}
 
-
-
-
-    /*
-    public Position movePieceNew(MoveTuple move){
-        ChessPieces piece;
-        int[] scoreTable;
-        lastMove = move;
-        ChessPieces[] friendlyPieces;
-        ChessPieces[] enemyPieces;
-        boolean friendlyCastling;
-        int friendlyKingPos;
-        int scoreColor;
-        int castlingRank;
-        if (whitesMove) {
-            friendlyPieces = whitePieces;
-            enemyPieces = blackPieces;
-            friendlyKingPos = whiteKingPos;
-            friendlyCastling = whiteCanCastle;
-            castlingRank = 0;
-            scoreColor = -1;
-        }
-        else {
-            friendlyPieces = blackPieces;
-            enemyPieces = whitePieces;
-            friendlyKingPos = blackKingPos;
-            friendlyCastling = blackCanCastle;
-            castlingRank = 7;
-            scoreColor = 1;
-        }
-
-        return movePieceGeneric(friendlyPieces,enemyPieces,friendlyKingPos,friendlyCastling,move,scoreColor,castlingRank);
-    }
-
-    private Position movePieceGeneric(ChessPieces[] friendlyPieces,ChessPieces[] enemyPieces,int friendlyKingPos,
-                                      boolean friendlyCastling,MoveTuple move, int scoreColor, int castlingRank){
-        int from = move.from;
-        int to = move.to;
-        ChessPieces piece = friendlyPieces[from];
-        int[] scoreTable = getTable(piece);
-        score += scoreColor*(scoreTable[to]-scoreTable[from]);
-        if (piece==wking){
-            friendlyKingPos = to;
-            if (friendlyCastling&&from/8==castlingRank&&(to%8==2||to%8==6)){
-                if (to%8==2){
-
-                }
-            }
-        }
-    }
-    */
-
-
     public Position movePiece(MoveTuple move){
         Position position = new Position(this);
         int from = move.from;
@@ -158,10 +102,25 @@ public class Position implements Comparable<Position> {
         ChessPieces piece;
         int[] scoreTable;
         position.lastMove = move;
+
+
         if (position.whitesMove) {
             piece = position.whitePieces[from];
             scoreTable = getTable(piece);
             position.score -= scoreTable[to]-scoreTable[from];
+
+            if (piece == wpawn && (from+7==to||from+9==to)&&position.blackPieces[to]==empty){
+                position.score -= getTable(blackPieces[to-8])[to-8];
+                position.blackPieces[to-8]=empty;
+                position.allPieces[to-8]=empty;
+            }
+
+            if (piece==wpawn && from+16==to){
+                position.enPassant = to;
+            }
+            else {
+                position.enPassant = -1;
+            }
 
             if (position.whitePieces[from] == wking) {
                 position.whiteKingPos = to;
@@ -211,9 +170,22 @@ public class Position implements Comparable<Position> {
             piece = position.blackPieces[from];
             scoreTable = getTable(piece);
             position.score += scoreTable[to]-scoreTable[from];
+
+            if (piece == bpawn && (from-7==to||from-9==to)&&position.whitePieces[to]==empty){
+                position.score += getTable(whitePieces[to+8])[to+8];
+                position.whitePieces[to+8]=empty;
+                position.allPieces[to+8]=empty;
+            }
+
+            if (piece==bpawn && from-16==to){
+                position.enPassant = to;
+            }
+            else {
+                position.enPassant = -1;
+            }
+
             if (position.blackPieces[from] == bking) {
                 position.blackKingPos = to;
-
                 if (from/8==7&&(to%8==2||to%8==6)&&position.blackCanCastle){
                     if (to%8==2) {
                         position.allPieces[56] = empty;
@@ -257,6 +229,7 @@ public class Position implements Comparable<Position> {
         position.moveList.add(move);
         position.recentMoves.add(move);
         position.lastMove = new MoveTuple(move);
+
         return position;
     }
 
@@ -599,14 +572,6 @@ public class Position implements Comparable<Position> {
         return whitesMove;
     }
 
-    public boolean isDoublePawnMove() {
-        return doublePawnMove;
-    }
-
-    public int getEnPassant() {
-        return enPassant;
-    }
-
     public boolean isBlackCanCastle() {
         return blackCanCastle;
     }
@@ -642,5 +607,8 @@ public class Position implements Comparable<Position> {
     public List<MoveTuple> getMoveList() {
         return moveList;
     }
+
+    public int getEnPassant() {return enPassant;}
+
 
 }

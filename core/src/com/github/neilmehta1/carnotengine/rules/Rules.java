@@ -91,6 +91,9 @@ public class Rules {
 
         } else if ((to/8 - 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8) && position.getBlackPieces()[to] != empty))) {
             moveAllowed = true;
+        } else if ((to/8 - 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8)
+                && position.getBlackPieces()[to] == empty && (position.getEnPassant()+1==from||position.getEnPassant()-1==from)))){
+            moveAllowed = true;
         }
         /**
          else if (state.doublePawnMove&&from/8==state.enPassant/8&&to/8-1==from/8&&to%8==state.enPassant%8&&
@@ -124,6 +127,9 @@ public class Rules {
         } else if ((to/8 + 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8) && position.getWhitePieces()[to] != empty))) {
             moveAllowed = true;
 
+        } else if ((to/8 + 1 == from/8 && ((to%8 - 1 == from%8 || to%8 + 1 == from%8) && position.getWhitePieces()[to] == empty))
+                && (position.getEnPassant()+1==from||position.getEnPassant()-1==from)){
+            moveAllowed = true;
         }
         /**
          else if (state.doublePawnMove&&from/8==state.enPassant/8&&to/8-1==from/8&&to%8==state.enPassant%8&&
