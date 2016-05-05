@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 import static com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces.*;
 
-public final class AI {
+public class AI {
 
 
     private AI() {
@@ -22,27 +22,14 @@ public final class AI {
 
     public static MoveTuple generateBlackBestLegalMoveGivenDepth(Position position) {
         MoveTuple toReturn = OpeningBook.opening(position);
-
-
         if (toReturn == null) {
-
-//            Tree testPos = new Tree(position);
-//            TreeNodeReturn abReturn = alphabeta(new Tree(position), CarnotEngine.depthOfSearch, -40000, 40000);
-//            return abReturn.position.lastMove;
-
             TreeNodeReturn nodeReturn = IDDFS(position);
             System.out.println(nodeReturn.score);
             return nodeReturn.position.getLastMove();
-        } else {
+        }
+        else {
             return toReturn;
         }
-
-
-        //Tree testPos = new Tree(position);
-        //TreeNodeReturn negamaxReturn = negamax(testPos,CarnotEngine.depthOfSearch,1);
-        //return negamaxReturn.position.lastMove;
-
-
     }
 
     private static TreeNodeReturn IDDFS(Position position) {
@@ -61,7 +48,6 @@ public final class AI {
 
     private static TreeNodeReturn alphabeta(Tree tree, int depth, int a, int b) {
         if (depth == 0) {
-            //return new TreeNodeReturn(scorePositionPST(tree.root),tree.root);
             return new TreeNodeReturn(tree.root.getScore(), tree.root);
         }
         if (!tree.root.isWhitesMove()) {
@@ -105,7 +91,7 @@ public final class AI {
 
     private static TreeNodeReturn negamax(Tree tree, int depth, int color) {
         if (depth == 0) {
-            //return new TreeNodeReturn(color *tree.root.score, tree.root);
+            return new TreeNodeReturn(color*tree.root.getScore(), tree.root);
         }
 
         TreeNodeReturn bestValue = new TreeNodeReturn(-40000, null);
@@ -138,103 +124,9 @@ public final class AI {
         return bestMove;
     }
 
-    /*
-    private static int scorePosition(Position position){
-        if (CarnotEngine.usePST){
-            return scorePositionPST(position);
-        }
-        else {
-            return scorePositionPiece(position);
-        }
-    }
-
-    private static int scorePositionPiece(Position position){
-
-        int score = 0;
-        for (int i=0; i<=7; i++) {
-            for (int j = 0; j <= 7; j++) {
-                score += getPieceScore(position.allPieces[j][i]);
-            }
-        }
-        return 0;
-    }
-
-
-    private static int getPieceScore(Position.ChessPieces piece){
-        if (piece==wpawn){
-            return -100;
-        }
-        else if (piece==bpawn){
-            return 100;
-        }
-        else if (piece==wrook){
-            return -500;
-        }
-        else if (piece==brook){
-            return 500;
-        }
-        else if (piece==wknight){
-            return -320;
-        }
-        else if (piece==bknight){
-            return 320;
-        }
-        else if (piece==wbishop){
-            return -330;
-        }
-        else if (piece==bbishop){
-            return 330;
-        }
-        else if (piece==wqueen){
-            return -900;
-        }
-        else if (piece==bqueen){
-            return 900;
-        }
-        else if (piece==wking||piece==bking){
-            return 0;
-        }
-        else {
-            return 0;
-        }
-    }
-    */
-
-    /*
-    private static int scorePositionPST(Position position){
-        //assuming no need to instantiate defensive copy of position object
-
-        int score = 0;
-        for (int i=0; i<=7; i++){
-            for (int j=0; j<=7; j++){
-                int[][] blackTable = getTable(position.allPieces[j][i]);
-                boolean white = Position.pieceIsWhite(position.allPieces[j][i]);
-                if (blackTable!=null&&white){
-                    score -= blackTable[7-j][i];
-                }
-                else if (blackTable!=null&&!white) {
-                    score += blackTable[j][i];
-                }
-            }
-        }
-        return score;
-    }
-    */
-
-
     public static MoveTuple generateBlackRandomLegalMove(Position position) {
 
-        /*
-        for(int i=0; i<=7; i++){
-            for(int j=0; j<=7; j++){
-                if (position.blackPieces[j][i]!=empty){
-                    moves.addAll(generateMovePossibilities(new PointTuple(i,j), position));
-                }
-            }
-        }
-        */
         HashSet<MoveTuple> moves = generatePositionPossibilities(position);
-
         ArrayList<MoveTuple> shuffledMoves = new ArrayList<MoveTuple>(moves);
         Collections.shuffle(shuffledMoves);
 
@@ -244,9 +136,8 @@ public final class AI {
     public static HashSet<MoveTuple> generatePositionPossibilities(Position position) {
         HashSet<MoveTuple> moves = new HashSet<MoveTuple>();
         for (int i = 0; i <= 63; i++) {
-            if (!position.isWhitesMove() && position.getBlackPieces()[i] != empty) {
-                moves.addAll(generateMovePossibilities(i, position));
-            } else if (position.isWhitesMove() && position.getWhitePieces()[i] != empty) {
+            if ((!position.isWhitesMove() && position.getBlackPieces()[i] != empty)||(position.isWhitesMove()
+                    && position.getWhitePieces()[i] != empty)) {
                 moves.addAll(generateMovePossibilities(i, position));
             }
         }

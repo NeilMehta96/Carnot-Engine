@@ -32,7 +32,6 @@ public class Tree {
             childList.add(this.root.movePiece(tuple));
         }
         Collections.sort(childList);
-
         if (!root.isWhitesMove()) {
             Collections.reverse(childList);
         }

@@ -41,8 +41,8 @@ public final class OpeningBook{
                 double g6 = 10318;
                 double a6 = 7892;
                 double sumGames = d6 + Nc6 + e6 + g6 + a6;
-                double rand = Math.random();
-//                double rand = .999999;
+//                double rand = Math.random();
+                double rand = .1;
                 if (rand < d6 / sumGames) {
                     return new MoveTuple(51,43);
                 } else if (rand < (d6 + Nc6) / sumGames) {
@@ -160,7 +160,8 @@ public final class OpeningBook{
             double g6 = 33871;
             double Nc6 = 21513;
             double sumGames = a6 + g6 + Nc6;
-            double rand = Math.random();
+            double rand = 0.1;
+//            double rand = Math.random();
             if (rand < a6 / sumGames) {
                 return new MoveTuple(48, 40);
             }

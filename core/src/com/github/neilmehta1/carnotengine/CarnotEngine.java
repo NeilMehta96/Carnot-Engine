@@ -7,6 +7,7 @@ import com.github.neilmehta1.carnotengine.screens.PlayScreen;
 public class CarnotEngine extends Game {
 	public SpriteBatch batch;
 	public static final boolean playerMovesBlack = false;
+	public static final boolean playerMovesWhite = true;
 	public static final int depthOfSearch = 5;
 
 	@Override

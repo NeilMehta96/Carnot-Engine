@@ -12,13 +12,15 @@ import com.github.neilmehta1.carnotengine.CarnotEngine;
 import com.github.neilmehta1.carnotengine.ai.AI;
 import com.github.neilmehta1.carnotengine.boardstate.Position;
 import com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces;
+
 import static com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces.*;
+
 import com.github.neilmehta1.carnotengine.rules.Rules;
 import com.github.neilmehta1.carnotengine.utils.MoveTuple;
 
 import java.util.*;
 
-public class PlayScreen implements Screen{
+public class PlayScreen implements Screen {
     private CarnotEngine game;
     private OrthographicCamera camera;
     private FitViewport viewport;
@@ -46,7 +48,6 @@ public class PlayScreen implements Screen{
     private Texture previousBlackSquare;
 
 
-
     private Position currentPosition;
 
     private boolean isTouched = false;
@@ -54,15 +55,14 @@ public class PlayScreen implements Screen{
     private MoveTuple prevMove;
 
 
+    private static HashMap<List<MoveTuple>, List<Position>> positionHash =
+            new HashMap<List<MoveTuple>, List<Position>>();
 
-    private static HashMap<List<MoveTuple>,List<Position>> positionHash =
-            new HashMap<List<MoveTuple>,List<Position>>();
 
-
-    public PlayScreen(CarnotEngine game){
+    public PlayScreen(CarnotEngine game) {
         this.game = game;
-        camera = new OrthographicCamera(worldWidth,worldHeight);
-        viewport = new FitViewport(worldWidth,worldHeight,camera);
+        camera = new OrthographicCamera(worldWidth, worldHeight);
+        viewport = new FitViewport(worldWidth, worldHeight, camera);
 
         bRookImage = new Texture(Gdx.files.internal("black_rook.png"));
         bKnightImage = new Texture(Gdx.files.internal("black_knight.png"));
@@ -91,6 +91,7 @@ public class PlayScreen implements Screen{
 
 
     }
+
     @Override
     public void show() {
 
@@ -101,41 +102,38 @@ public class PlayScreen implements Screen{
 
         System.gc();
 
-        if (!CarnotEngine.playerMovesBlack&&!currentPosition.isWhitesMove()){
+        if (!CarnotEngine.playerMovesBlack && !currentPosition.isWhitesMove()) {
 
             currentPosition.recentMoves = new LinkedList<MoveTuple>();
             double start = System.currentTimeMillis();
             prevMove = AI.generateBlackBestLegalMoveGivenDepth(currentPosition);
             double end = System.currentTimeMillis();
-            positionHash = new HashMap<List<MoveTuple>,List<Position>>();
+            positionHash = new HashMap<List<MoveTuple>, List<Position>>();
 
-            System.out.println((end-start)/1000);
-//            System.out.println(currentPosition.halfMoveNumber);
-//            System.out.println(currentPosition.allPieces[6][2]);
-//            System.out.println(prevMove.from.x);
-//            System.out.println(prevMove.from.y);
-//            System.out.println(prevMove.to.x);
-//            System.out.println(prevMove.to.y);
+            System.out.println((end - start) / 1000);
 
             currentPosition = currentPosition.movePiece(prevMove);
-//            for (MoveTuple move : currentPosition.moveList){
-//                System.out.println(move.from.x);
-//                System.out.println(move.from.y);
-//                System.out.println(move.to.x);
-//                System.out.println(move.to.y);
-//
-//            }
+        }
+        else if (!CarnotEngine.playerMovesWhite && currentPosition.isWhitesMove()) {
+
+            currentPosition.recentMoves = new LinkedList<MoveTuple>();
+            double start = System.currentTimeMillis();
+            prevMove = AI.generateBlackBestLegalMoveGivenDepth(currentPosition);
+            double end = System.currentTimeMillis();
+            positionHash = new HashMap<List<MoveTuple>, List<Position>>();
+
+            System.out.println((end - start) / 1000);
+
+            currentPosition = currentPosition.movePiece(prevMove);
         }
 
-
-
-        if (Gdx.input.justTouched()){
-            int touch = getIdx(camera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0),
-                    viewport.getScreenX(),viewport.getScreenY(), viewport.getScreenWidth(),viewport.getScreenHeight()));
-            if (touch>=0&& touch<=63) {
+        if (Gdx.input.justTouched()) {
+            int touch = getIdx(camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0),
+                    viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight()));
+            if (touch >= 0 && touch <= 63) {
                 if (((currentPosition.isWhitesMove() && currentPosition.getWhitePieces()[touch] != empty) ||
                         (CarnotEngine.playerMovesBlack && !currentPosition.isWhitesMove() && currentPosition.getBlackPieces()[touch] != empty))) {
-                    if (isTouched && lastTouch%8 == touch%8 && lastTouch/8 == touch/8) {
+                    if (isTouched && lastTouch % 8 == touch % 8 && lastTouch / 8 == touch / 8) {
                         isTouched = false;
                     } else {
                         isTouched = true;
@@ -143,7 +141,7 @@ public class PlayScreen implements Screen{
                     }
 
                 } else if (isTouched) {
-                    MoveTuple move = new MoveTuple(lastTouch,touch);
+                    MoveTuple move = new MoveTuple(lastTouch, touch);
                     if (Rules.ruleCheck(move, currentPosition, true)) {
                         currentPosition = currentPosition.movePiece(move);
                         prevMove = currentPosition.getLastMove();
@@ -157,45 +155,41 @@ public class PlayScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        for (int i=0;i<=7;i++){
-            for (int j=0;j<=7;j++){
-                if ((i+j)%2 ==0){
-                    game.batch.draw(blackSquare,i-4,j-4,1,1);
+        for (int i = 0; i <= 7; i++) {
+            for (int j = 0; j <= 7; j++) {
+                if ((i + j) % 2 == 0) {
+                    game.batch.draw(blackSquare, i - 4, j - 4, 1, 1);
+                } else {
+                    game.batch.draw(whiteSquare, i - 4, j - 4, 1, 1);
                 }
-                else {
-                    game.batch.draw(whiteSquare,i-4,j-4,1,1);
-                }
-                if(currentPosition.getAllPieces()[j*8+i]!=empty) {
-                    game.batch.draw(findTexture(currentPosition.getAllPieces()[j*8+i]), i - 4, j - 4, 1, 1);
+                if (currentPosition.getAllPieces()[j * 8 + i] != empty) {
+                    game.batch.draw(findTexture(currentPosition.getAllPieces()[j * 8 + i]), i - 4, j - 4, 1, 1);
                 }
             }
         }
 
-        if (prevMove!=null){
-            if (((prevMove.from%8)%2+(prevMove.from/8)%2)%2==0) {
-                game.batch.draw(previousBlackSquare, prevMove.from%8 - 4, prevMove.from/8 - 4, 1, 1);
+        if (prevMove != null) {
+            if (((prevMove.from % 8) % 2 + (prevMove.from / 8) % 2) % 2 == 0) {
+                game.batch.draw(previousBlackSquare, prevMove.from % 8 - 4, prevMove.from / 8 - 4, 1, 1);
+            } else {
+                game.batch.draw(previousWhiteSquare, prevMove.from % 8 - 4, prevMove.from / 8 - 4, 1, 1);
             }
-            else {
-                game.batch.draw(previousWhiteSquare, prevMove.from%8 - 4, prevMove.from/8 - 4, 1, 1);
+            if (((prevMove.to % 8) % 2 + (prevMove.to / 8) % 2) % 2 == 0) {
+                game.batch.draw(previousBlackSquare, prevMove.to % 8 - 4, prevMove.to / 8 - 4, 1, 1);
+            } else {
+                game.batch.draw(previousWhiteSquare, prevMove.to % 8 - 4, prevMove.to / 8 - 4, 1, 1);
             }
-            if (((prevMove.to%8)%2+(prevMove.to/8)%2)%2==0) {
-                game.batch.draw(previousBlackSquare, prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
-            }
-            else {
-                game.batch.draw(previousWhiteSquare, prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
-            }
-            game.batch.draw(findTexture(currentPosition.getAllPieces()[prevMove.to]),prevMove.to%8 - 4, prevMove.to/8 - 4, 1, 1);
+            game.batch.draw(findTexture(currentPosition.getAllPieces()[prevMove.to]), prevMove.to % 8 - 4, prevMove.to / 8 - 4, 1, 1);
 
         }
 
-        if (isTouched){
-            if (((lastTouch%8)%2+(lastTouch/8)%2)%2==0){
-                game.batch.draw(selectedBlackSquare,lastTouch%8-4,lastTouch/8-4,1,1);
+        if (isTouched) {
+            if (((lastTouch % 8) % 2 + (lastTouch / 8) % 2) % 2 == 0) {
+                game.batch.draw(selectedBlackSquare, lastTouch % 8 - 4, lastTouch / 8 - 4, 1, 1);
+            } else {
+                game.batch.draw(selectedWhiteSquare, lastTouch % 8 - 4, lastTouch / 8 - 4, 1, 1);
             }
-            else {
-                game.batch.draw(selectedWhiteSquare,lastTouch%8-4,lastTouch/8-4,1,1);
-            }
-            game.batch.draw(findTexture(currentPosition.getAllPieces()[lastTouch]),lastTouch%8-4,lastTouch/8-4,1,1);
+            game.batch.draw(findTexture(currentPosition.getAllPieces()[lastTouch]), lastTouch % 8 - 4, lastTouch / 8 - 4, 1, 1);
         }
         game.batch.end();
 
@@ -203,27 +197,24 @@ public class PlayScreen implements Screen{
     }
 
 
-    private int getIdx(Vector3 vec){
+    private int getIdx(Vector3 vec) {
         int x;
         int y;
-        if (vec.x>=0){
-            x = (int)vec.x;
+        if (vec.x >= 0) {
+            x = (int) vec.x;
+        } else {
+            x = ((int) vec.x) - 1;
         }
-        else{
-            x = ((int)vec.x)-1;
+        if (vec.y >= 0) {
+            y = (int) vec.y;
+        } else {
+            y = ((int) vec.y) - 1;
         }
-        if (vec.y>=0){
-            y = (int)vec.y;
-        }
-        else{
-            y = ((int)vec.y)-1;
-        }
-        return (y+4)*8+x+4;
+        return (y + 4) * 8 + x + 4;
     }
 
 
-
-    private Texture findTexture(ChessPieces piece){
+    private Texture findTexture(ChessPieces piece) {
         switch (piece) {
             case wrook:
                 return wRookImage;
@@ -257,7 +248,7 @@ public class PlayScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width,height);
+        viewport.update(width, height);
     }
 
     @Override

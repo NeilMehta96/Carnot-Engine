@@ -11,7 +11,6 @@ import static com.github.neilmehta1.carnotengine.boardstate.Position.ChessPieces
 public class Position implements Comparable<Position> {
 
 
-
     public enum ChessPieces {
         brook,
         bknight,
@@ -29,17 +28,27 @@ public class Position implements Comparable<Position> {
     }
 
     private static int[] bpawnPST = new int[64];
+    private static int[] bpawnEndPST = new int[64];
     private static int[] brookPST = new int[64];
+    private static int[] brookEndPST = new int[64];
     private static int[] bknightPST = new int[64];
+    private static int[] bknightEndPST = new int[64];
     private static int[] bbishopPST = new int[64];
+    private static int[] bbishopEndPST = new int[64];
     private static int[] bqueenPST = new int[64];
+    private static int[] bqueenEndPST = new int[64];
     private static int[] bkingMidPST = new int[64];
     private static int[] bkingEndPST = new int[64];
     private static int[] wpawnPST = new int[64];
+    private static int[] wpawnEndPST = new int[64];
     private static int[] wrookPST = new int[64];
+    private static int[] wrookEndPST = new int[64];
     private static int[] wknightPST = new int[64];
+    private static int[] wknightEndPST = new int[64];
     private static int[] wbishopPST = new int[64];
+    private static int[] wbishopEndPST = new int[64];
     private static int[] wqueenPST = new int[64];
+    private static int[] wqueenEndPST = new int[64];
     private static int[] wkingMidPST = new int[64];
     private static int[] wkingEndPST = new int[64];
 
@@ -64,38 +73,43 @@ public class Position implements Comparable<Position> {
     private boolean A8RookMoved = false;
     private boolean H8RookMoved = false;
 
+    private boolean wqueenAlive = true;
+    private boolean bqueenAlive = true;
+
     public List<MoveTuple> recentMoves = new LinkedList<MoveTuple>();
 
 
-    public Position(Position position){
-        this.allPieces = copyBoard(position.allPieces);
-        this.whitePieces = copyBoard(position.whitePieces);
-        this.blackPieces = copyBoard(position.blackPieces);
-        this.whiteCanCastle = position.whiteCanCastle;
-        this.blackCanCastle = position.blackCanCastle;
-        this.enPassant = position.enPassant;
-        this.whitesMove = position.whitesMove;
-        this.blackKingPos = position.blackKingPos;
-        this.whiteKingPos = position.whiteKingPos;
+    public Position(Position position) {
+        allPieces = copyBoard(position.allPieces);
+        whitePieces = copyBoard(position.whitePieces);
+        blackPieces = copyBoard(position.blackPieces);
+        whiteCanCastle = position.whiteCanCastle;
+        blackCanCastle = position.blackCanCastle;
+        enPassant = position.enPassant;
+        whitesMove = position.whitesMove;
+        blackKingPos = position.blackKingPos;
+        whiteKingPos = position.whiteKingPos;
         if (position.lastMove != null) {
-            this.lastMove = position.lastMove;
+            lastMove = position.lastMove;
         }
-        this.score = position.score;
-        this.halfMoveNumber = position.halfMoveNumber;
-        this.moveList = copyList(position.moveList);
-        this.recentMoves = copyList(position.recentMoves);
-        this.A1RookMoved = position.A1RookMoved;
-        this.H1RookMoved = position.H1RookMoved;
-        this.A8RookMoved = position.A8RookMoved;
-        this.H8RookMoved = position.H8RookMoved;
+        score = position.score;
+        halfMoveNumber = position.halfMoveNumber;
+        moveList = copyList(position.moveList);
+        recentMoves = copyList(position.recentMoves);
+        A1RookMoved = position.A1RookMoved;
+        H1RookMoved = position.H1RookMoved;
+        A8RookMoved = position.A8RookMoved;
+        H8RookMoved = position.H8RookMoved;
+        wqueenAlive = position.wqueenAlive;
+        bqueenAlive = position.bqueenAlive;
     }
 
-    public Position(Position position, boolean setWhitesMoveTo){
+    public Position(Position position, boolean setWhitesMoveTo) {
         this(position);
         this.whitesMove = setWhitesMoveTo;
     }
 
-    public Position(){
+    public Position() {
         initAll(this.allPieces);
         initWhite(this.whitePieces);
         initBlack(this.blackPieces);
@@ -103,69 +117,70 @@ public class Position implements Comparable<Position> {
     }
 
     @Override
-    public int compareTo(Position o) {return ((Integer)score).compareTo(o.score);}
+    public int compareTo(Position o) {
+        return ((Integer) score).compareTo(o.score);
+    }
 
-    public Position movePiece(MoveTuple move){
+    public Position movePiece(MoveTuple move) {
         Position position = new Position(this);
         int from = move.from;
         int to = move.to;
         ChessPieces piece;
         int[] scoreTable;
         position.lastMove = move;
-
         if (position.whitesMove) {
             piece = position.whitePieces[from];
             scoreTable = getTable(piece);
-            position.score -= scoreTable[to]-scoreTable[from];
+            position.score -= scoreTable[to] - scoreTable[from];
 
-            if (piece == wpawn && (from+7==to||from+9==to)&&position.enPassant!=-2&&position.blackPieces[to]==empty){
-                position.score -= getTable(position.blackPieces[to-8])[to-8];
-                position.blackPieces[to-8]=empty;
-                position.allPieces[to-8]=empty;
+            if (piece == wpawn && (from + 7 == to || from + 9 == to) && position.enPassant != -2 && position.blackPieces[to] == empty) {
+                position.score -= getTable(position.blackPieces[to - 8])[to - 8];
+                position.blackPieces[to - 8] = empty;
+                position.allPieces[to - 8] = empty;
             }
 
-            if (piece==wpawn && from+16==to){
+            if (piece == wpawn && from + 16 == to) {
                 position.enPassant = to;
-            }
-            else {
+            } else {
                 position.enPassant = -2;
             }
 
             if (position.whitePieces[from] == wking) {
                 position.whiteKingPos = to;
 
-                if (from/8==0&&(to%8==2||to%8==6)&&position.whiteCanCastle){
-                    if (to%8==2) {
+                if (from / 8 == 0 && (to % 8 == 2 || to % 8 == 6) && position.whiteCanCastle) {
+                    if (to % 8 == 2) {
                         position.allPieces[0] = empty;
                         position.whitePieces[0] = empty;
                         position.allPieces[3] = wrook;
                         position.whitePieces[3] = wrook;
-                        position.score -= wrookPST[3]-wrookPST[0];
-                    }
-                    else {
+                        position.score -= wrookPST[3] - wrookPST[0];
+                    } else {
                         position.allPieces[7] = empty;
                         position.whitePieces[7] = empty;
                         position.allPieces[5] = wrook;
                         position.whitePieces[5] = wrook;
-                        position.score -= wrookPST[5]-wrookPST[7];
+                        position.score -= wrookPST[5] - wrookPST[7];
                     }
                 }
                 position.whiteCanCastle = false;
 
 
             }
-            if (position.blackPieces[to] != empty){
+            if (position.blackPieces[to] != empty) {
                 position.score -= getTable(position.blackPieces[to])[to];
+                if (position.blackPieces[to]==bqueen){
+                    position.bqueenAlive = false;
+                }
                 position.blackPieces[to] = empty;
             }
 
 
-            if (to/8==7&&position.whitePieces[from]==wpawn){
-                position.score -= wqueenPST[to]-wpawnPST[from];
+            if (to / 8 == 7 && position.whitePieces[from] == wpawn) {
+                position.score -= wqueenPST[to] - wpawnPST[from];
                 position.whitePieces[to] = wqueen;
                 position.allPieces[to] = wqueen;
-            }
-            else {
+            } else {
                 position.whitePieces[to] = position.whitePieces[from];
                 position.allPieces[to] = position.whitePieces[to];
             }
@@ -173,60 +188,58 @@ public class Position implements Comparable<Position> {
             position.allPieces[from] = empty;
 
 
-
-        }
-        else {
+        } else {
             piece = position.blackPieces[from];
             scoreTable = getTable(piece);
-            position.score += scoreTable[to]-scoreTable[from];
+            position.score += scoreTable[to] - scoreTable[from];
 
-            if (piece == bpawn && (from-7==to||from-9==to)&&position.enPassant!=-2&&position.whitePieces[to]==empty){
-                position.score += getTable(position.whitePieces[to+8])[to+8];
-                position.whitePieces[to+8]=empty;
-                position.allPieces[to+8]=empty;
+            if (piece == bpawn && (from - 7 == to || from - 9 == to) && position.enPassant != -2 && position.whitePieces[to] == empty) {
+                position.score += getTable(position.whitePieces[to + 8])[to + 8];
+                position.whitePieces[to + 8] = empty;
+                position.allPieces[to + 8] = empty;
             }
 
-            if (piece==bpawn && from-16==to){
+            if (piece == bpawn && from - 16 == to) {
                 position.enPassant = to;
-            }
-            else {
+            } else {
                 position.enPassant = -2;
             }
 
             if (position.blackPieces[from] == bking) {
                 position.blackKingPos = to;
-                if (from/8==7&&(to%8==2||to%8==6)&&position.blackCanCastle){
-                    if (to%8==2) {
+                if (from / 8 == 7 && (to % 8 == 2 || to % 8 == 6) && position.blackCanCastle) {
+                    if (to % 8 == 2) {
                         position.allPieces[56] = empty;
                         position.blackPieces[56] = empty;
                         position.allPieces[59] = brook;
                         position.blackPieces[59] = brook;
-                        position.score += brookPST[59]-brookPST[56];
-                    }
-                    else {
+                        position.score += brookPST[59] - brookPST[56];
+                    } else {
                         position.allPieces[63] = empty;
                         position.blackPieces[63] = empty;
                         position.allPieces[61] = brook;
                         position.blackPieces[61] = brook;
-                        position.score += wrookPST[61]-wrookPST[63];
+                        position.score += wrookPST[61] - wrookPST[63];
                     }
                 }
                 position.blackCanCastle = false;
 
 
             }
-            if (position.whitePieces[to] != empty){
+            if (position.whitePieces[to] != empty) {
                 position.score += getTable(position.whitePieces[to])[to];
+                if (position.whitePieces[to]==wqueen){
+                    position.wqueenAlive = false;
+                }
                 position.whitePieces[to] = empty;
             }
 
 
-            if (to/8==0&&position.blackPieces[from]==bpawn){
+            if (to / 8 == 0 && position.blackPieces[from] == bpawn) {
                 position.score += bqueenPST[to];
                 position.blackPieces[to] = bqueen;
                 position.allPieces[to] = bqueen;
-            }
-            else {
+            } else {
                 position.blackPieces[to] = position.blackPieces[from];
                 position.allPieces[to] = position.blackPieces[to];
             }
@@ -234,16 +247,16 @@ public class Position implements Comparable<Position> {
             position.allPieces[from] = empty;
         }
 
-        if (position.whitePieces[0]!=wrook){
+        if (position.whitePieces[0] != wrook) {
             position.A1RookMoved = true;
         }
-        if (position.whitePieces[7]!=wrook){
+        if (position.whitePieces[7] != wrook) {
             position.H1RookMoved = true;
         }
-        if (position.blackPieces[56]!=brook){
+        if (position.blackPieces[56] != brook) {
             position.A8RookMoved = true;
         }
-        if (position.blackPieces[63]!=brook){
+        if (position.blackPieces[63] != brook) {
             position.H8RookMoved = true;
         }
 
@@ -252,84 +265,88 @@ public class Position implements Comparable<Position> {
         position.moveList.add(move);
         position.recentMoves.add(move);
         position.lastMove = new MoveTuple(move);
+        /*
+        if (!position.wqueenAlive&&!position.bqueenAlive){
+            wpawnPST = wpawnEndPST;
+            wrookPST = wrookEndPST;
+            wknightPST = wknightEndPST;
+            wbishopPST = wbishopEndPST;
+            wkingMidPST = wkingEndPST;
+            wqueenPST = wqueenEndPST;
 
+            bpawnPST = bpawnEndPST;
+            brookPST = brookEndPST;
+            bknightPST = bknightEndPST;
+            bbishopPST = bbishopEndPST;
+            bkingMidPST = bkingEndPST;
+            bqueenPST = bqueenEndPST;
+        }
+        */
         return position;
     }
 
-    private static ChessPieces[] copyBoard(ChessPieces[] toCopy){
+    private static ChessPieces[] copyBoard(ChessPieces[] toCopy) {
         ChessPieces[] output = new ChessPieces[64];
-        for (int i=0; i<=63; i++){
+        for (int i = 0; i <= 63; i++) {
             output[i] = toCopy[i];
         }
         return output;
     }
 
-    public static <T> List<T> copyList(List<T> obList){
+    public static <T> List<T> copyList(List<T> obList) {
         LinkedList<T> toReturn = new LinkedList<T>();
-        for (T obj : obList){
+        for (T obj : obList) {
             toReturn.add(obj);
         }
         return toReturn;
     }
 
-    private static boolean pieceIsWhite(ChessPieces piece){
-        return piece==wpawn||piece==wrook||piece==wknight||piece==wbishop||piece==wqueen||piece==wking;
+    private static boolean pieceIsWhite(ChessPieces piece) {
+        return piece == wpawn || piece == wrook || piece == wknight || piece == wbishop || piece == wqueen || piece == wking;
     }
 
-    public static boolean pieceIsBlack(ChessPieces piece){
-        return piece!=empty&&!Position.pieceIsWhite(piece);
+    public static boolean pieceIsBlack(ChessPieces piece) {
+        return piece != empty && !Position.pieceIsWhite(piece);
     }
 
-    private static int[] getTable(Position.ChessPieces piece){
-        if (piece==wpawn||piece==bpawn){
-            if (piece==bpawn) {
+    private static int[] getTable(Position.ChessPieces piece) {
+        if (piece == wpawn || piece == bpawn) {
+            if (piece == bpawn) {
                 return bpawnPST;
-            }
-            else {
+            } else {
                 return wpawnPST;
             }
-        }
-        else if (piece==wrook||piece==brook){
-            if (piece==brook) {
+        } else if (piece == wrook || piece == brook) {
+            if (piece == brook) {
                 return brookPST;
-            }
-            else {
+            } else {
                 return wrookPST;
             }
-        }
-        else if (piece==wknight||piece==bknight){
-            if (piece==bknight) {
+        } else if (piece == wknight || piece == bknight) {
+            if (piece == bknight) {
                 return bknightPST;
-            }
-            else {
+            } else {
                 return wknightPST;
             }
-        }
-        else if (piece==wbishop||piece==bbishop){
-            if (piece==bbishop) {
+        } else if (piece == wbishop || piece == bbishop) {
+            if (piece == bbishop) {
                 return bbishopPST;
-            }
-            else {
+            } else {
                 return wbishopPST;
             }
-        }
-        else if (piece==wqueen||piece==bqueen){
-            if (piece==bqueen) {
+        } else if (piece == wqueen || piece == bqueen) {
+            if (piece == bqueen) {
                 return bqueenPST;
-            }
-            else {
+            } else {
                 return wqueenPST;
             }
-        }
-        else if (piece==wking||piece==bking){
-            if (piece==bking) {
+        } else if (piece == wking || piece == bking) {
+            if (piece == bking) {
                 return bkingMidPST;
-            }
-            else {
+            } else {
                 return wkingMidPST;
             }
-        }
-        else {
+        } else {
             throw new RuntimeException("empty piece returned");
         }
     }
@@ -339,46 +356,47 @@ public class Position implements Comparable<Position> {
 
         initEmptyBoard(initChessPieces);
 
-        initChessPieces[0]=wrook;
-        initChessPieces[1]=wknight;
-        initChessPieces[2]=wbishop;
-        initChessPieces[3]=wqueen;
-        initChessPieces[4]=wking;
-        initChessPieces[5]=wbishop;
-        initChessPieces[6]=wknight;
-        initChessPieces[7]=wrook;
+        initChessPieces[0] = wrook;
+        initChessPieces[1] = wknight;
+        initChessPieces[2] = wbishop;
+        initChessPieces[3] = wqueen;
+        initChessPieces[4] = wking;
+        initChessPieces[5] = wbishop;
+        initChessPieces[6] = wknight;
+        initChessPieces[7] = wrook;
 
-        for (int i=8;i<=15;i++){
-            initChessPieces[i]=wpawn;
-            initChessPieces[63-i]=bpawn;
+        for (int i = 8; i <= 15; i++) {
+            initChessPieces[i] = wpawn;
+            initChessPieces[63 - i] = bpawn;
         }
 
-        initChessPieces[56]=brook;
-        initChessPieces[56+1]=bknight;
-        initChessPieces[56+2]=bbishop;
-        initChessPieces[56+3]=bqueen;
-        initChessPieces[56+4]=bking;
-        initChessPieces[56+5]=bbishop;
-        initChessPieces[56+6]=bknight;
-        initChessPieces[56+7]=brook;
+        initChessPieces[56] = brook;
+        initChessPieces[56 + 1] = bknight;
+        initChessPieces[56 + 2] = bbishop;
+        initChessPieces[56 + 3] = bqueen;
+        initChessPieces[56 + 4] = bking;
+        initChessPieces[56 + 5] = bbishop;
+        initChessPieces[56 + 6] = bknight;
+        initChessPieces[56 + 7] = brook;
 
 
     }
+
     private static void initWhite(ChessPieces[] initChessPieces) {
 
         initEmptyBoard(initChessPieces);
 
-        initChessPieces[0]=wrook;
-        initChessPieces[1]=wknight;
-        initChessPieces[2]=wbishop;
-        initChessPieces[3]=wqueen;
-        initChessPieces[4]=wking;
-        initChessPieces[5]=wbishop;
-        initChessPieces[6]=wknight;
-        initChessPieces[7]=wrook;
+        initChessPieces[0] = wrook;
+        initChessPieces[1] = wknight;
+        initChessPieces[2] = wbishop;
+        initChessPieces[3] = wqueen;
+        initChessPieces[4] = wking;
+        initChessPieces[5] = wbishop;
+        initChessPieces[6] = wknight;
+        initChessPieces[7] = wrook;
 
-        for (int i=8;i<=15;i++){
-            initChessPieces[i]=wpawn;
+        for (int i = 8; i <= 15; i++) {
+            initChessPieces[i] = wpawn;
         }
 
     }
@@ -387,22 +405,22 @@ public class Position implements Comparable<Position> {
 
         initEmptyBoard(initChessPieces);
 
-        for (int i=8;i<=15;i++){
-            initChessPieces[63-i]=bpawn;
+        for (int i = 8; i <= 15; i++) {
+            initChessPieces[63 - i] = bpawn;
         }
 
-        initChessPieces[56]=brook;
-        initChessPieces[56+1]=bknight;
-        initChessPieces[56+2]=bbishop;
-        initChessPieces[56+3]=bqueen;
-        initChessPieces[56+4]=bking;
-        initChessPieces[56+5]=bbishop;
-        initChessPieces[56+6]=bknight;
-        initChessPieces[56+7]=brook;
+        initChessPieces[56] = brook;
+        initChessPieces[56 + 1] = bknight;
+        initChessPieces[56 + 2] = bbishop;
+        initChessPieces[56 + 3] = bqueen;
+        initChessPieces[56 + 4] = bking;
+        initChessPieces[56 + 5] = bbishop;
+        initChessPieces[56 + 6] = bknight;
+        initChessPieces[56 + 7] = brook;
     }
 
-    private static void initEmptyBoard(ChessPieces[] board){
-        for (int i=0; i<=63; i++){
+    private static void initEmptyBoard(ChessPieces[] board) {
+        for (int i = 0; i <= 63; i++) {
             board[i] = empty;
         }
     }
@@ -422,9 +440,9 @@ public class Position implements Comparable<Position> {
                 0, 0, 0, 0, 0, 0, 0, 0
 
         };
-        /*
+
         wpawnEndPST = new int[]{
-                0, 0, 0, 0, 0, 0, 0, 0,,
+                0, 0, 0, 0, 0, 0, 0, 0,
                 5, -10, -20, -25, -25, -20, -10, 5,
                 5, -10, -20, -25, -25, -20, -10, 5,
                 10, -5, -15, -20, -20, -15, -5, 10,
@@ -433,7 +451,7 @@ public class Position implements Comparable<Position> {
                 45, 30, 16, 5, 5, 16, 30, 45,
                 0, 0, 0, 0, 0, 0, 0, 0
         };
-        */
+
 
         wknightPST = new int[]{
                 -69, -19, -24, -14, -14, -24, -19, -69,
@@ -446,7 +464,7 @@ public class Position implements Comparable<Position> {
                 -59, -39, -29, -29, -29, -29, -39, -59
 
         };
-        /*
+
         wknightEndPST = new int[]{
                 -63, -53, -43, -43, -43, -43, -53, -63,
                 -53, -43, 18, 28, 28, 18, -43, -53,
@@ -457,7 +475,7 @@ public class Position implements Comparable<Position> {
                 -53, -43, 38, 48, 48, 38, -43, -53,
                 -63, -53, -43, -43, -43, -43, -53, -63
         };
-        */
+
 
         wbishopPST = new int[]{
                 -30, -25, -20, -20, -20, -20, -25, -30,
@@ -470,7 +488,7 @@ public class Position implements Comparable<Position> {
                 -20, -18, -16, -14, -14, -16, -18, -20
 
         };
-        /*
+
         wbishopEndPST = new int[]{
                 -38, -18, -8, 2, 2, -8, -18, -38,
                 -18, -8, 2, 7, 7, 2, -8, -18,
@@ -481,7 +499,7 @@ public class Position implements Comparable<Position> {
                 -18, -8, 0, 12, 12, 0, -8, -18,
                 -38, -18, -8, 2, 2, -8, -18, -38
         };
-        */
+
 
         wrookPST = new int[]{
                 -8, -6, 2, 7, 7, 2, -6, -8,
@@ -494,7 +512,7 @@ public class Position implements Comparable<Position> {
                 -8, -6, 2, 7, 7, 2, -6, -8
 
         };
-        /*
+
         wrookEndPST = new int[]{
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
@@ -505,7 +523,7 @@ public class Position implements Comparable<Position> {
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0
         };
-        */
+
 
         wqueenPST = new int[]{
                 -26, -16, -6, 4, 4, -6, -16, -26,
@@ -518,7 +536,7 @@ public class Position implements Comparable<Position> {
                 4, 4, 4, 4, 4, 4, 4, 4
 
         };
-        /*
+
         wqueenEndPST = new int[]{
                 -46, -41, -31, -26, -26, -31, -41, -46,
                 -31, -26, -16, -6, -6, -16, -26, -31,
@@ -529,7 +547,7 @@ public class Position implements Comparable<Position> {
                 -16, 4, 19, 29, 29, 19, 4, -16,
                 -26, -6, -1, 4, 4, -1, -6, -26
         };
-        */
+
 
         wkingMidPST = new int[]{
                 -20, 0, 0, -10, -10, 0, 0, -20,
@@ -544,40 +562,52 @@ public class Position implements Comparable<Position> {
         };
 
         wkingEndPST = new int[]{
-                -20, 0, 0, -10, -10, 0, 0, -20,
-                -30, -30, -30, -35, -35, -30, -30, -30,
-                -40, -40, -45, -50, -50, -45, -40, -40,
-                -50, -50, -55, -60, -60, -55, -50, -50,
-                -55, -55, -60, -70, -70, -60, -55, -55,
-                -55, -55, -60, -70, -70, -60, -55, -55,
-                -55, -55, -60, -70, -70, -60, -55, -55,
-                -55, -55, -60, -70, -70, -60, -55, -55
+                -30, -25, -15, -10, -10, -15, -25, -30,
+                -15, -10, 0, 10, 10, 0, -10, -15,
+                0, 15, 30, 40, 40, 30, 15, 0,
+                10, 25, 40, 50, 50, 40, 25, 10,
+                10, 25, 40, 50, 50, 40, 25, 10,
+                10, 25, 40, 50, 50, 40, 25, 10,
+                0, 20, 35, 45, 45, 35, 20, 0,
+                -10, 10, 15, 20, 20, 15, 10, -10
+
         };
 
-        for (int i=0; i<=63; i++){
-            wpawnPST[i] = wpawnPST[i]+100;
-            wrookPST[i] = wrookPST[i]+500;
-            wknightPST[i] = wknightPST[i]+320;
-            wbishopPST[i] = wbishopPST[i]+330;
-            wqueenPST[i] = wqueenPST[i]+900;
-            wkingMidPST[i] = wkingMidPST[i]+20000;
-            wkingEndPST[i] = wkingEndPST[i]+20000;
-
+        for (int i = 0; i <= 63; i++) {
+            wpawnPST[i] = wpawnPST[i] + 100;
+            wrookPST[i] = wrookPST[i] + 500;
+            wknightPST[i] = wknightPST[i] + 320;
+            wbishopPST[i] = wbishopPST[i] + 330;
+            wqueenPST[i] = wqueenPST[i] + 900;
+            wkingMidPST[i] = wkingMidPST[i] + 20000;
+            wkingEndPST[i] = wkingEndPST[i] + 20000;
+            wpawnEndPST[i] = wpawnEndPST[i] + 100;
+            wrookEndPST[i] = wrookEndPST[i] + 500;
+            wknightEndPST[i] = wknightEndPST[i] + 320;
+            wbishopEndPST[i] = wbishopEndPST[i] + 330;
+            wqueenEndPST[i] = wqueenEndPST[i] + 900;
+            wkingMidPST[i] = wkingMidPST[i] + 20000;
+            wkingEndPST[i] = wkingEndPST[i] + 20000;
         }
 
         bpawnPST = reverseTable(wpawnPST);
+        bpawnEndPST = reverseTable(wpawnEndPST);
         brookPST = reverseTable(wrookPST);
+        brookEndPST = reverseTable(wrookEndPST);
         bknightPST = reverseTable(wknightPST);
+        bknightEndPST = reverseTable(wknightEndPST);
         bbishopPST = reverseTable(wbishopPST);
+        bbishopEndPST = reverseTable(wbishopEndPST);
         bqueenPST = reverseTable(wqueenPST);
+        bqueenEndPST = reverseTable(wqueenEndPST);
         bkingMidPST = reverseTable(wkingMidPST);
         bkingEndPST = reverseTable(wkingEndPST);
     }
 
-    private static int[] reverseTable(int[] whiteTable){
+    private static int[] reverseTable(int[] whiteTable) {
         int[] toReturn = new int[64];
-        for (int i=0; i<=63; i++){
-            toReturn[i] = whiteTable[63-i];
+        for (int i = 0; i <= 63; i++) {
+            toReturn[i] = whiteTable[63 - i];
         }
         return toReturn;
     }
@@ -631,7 +661,9 @@ public class Position implements Comparable<Position> {
         return moveList;
     }
 
-    public int getEnPassant() {return enPassant;}
+    public int getEnPassant() {
+        return enPassant;
+    }
 
     public boolean isA1RookMoved() {
         return A1RookMoved;

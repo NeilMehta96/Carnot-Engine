@@ -77,7 +77,6 @@ public class Rules {
 
     private static boolean whitePawnRuleCheck(MoveTuple move, Position position, boolean checkForCheck) {
 
-        //TODO: implement En Passant
         int to = move.to;
         int from = move.from;
         boolean moveAllowed = false;
@@ -112,7 +111,6 @@ public class Rules {
 
     private static boolean blackPawnRuleCheck(MoveTuple move, Position position, boolean checkForCheck) {
 
-        //TODO: implement En Passant
         int to = move.to;
         int from = move.from;
         boolean moveAllowed = false;
