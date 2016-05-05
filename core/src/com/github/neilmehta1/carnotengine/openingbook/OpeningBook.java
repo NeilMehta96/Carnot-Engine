@@ -19,7 +19,7 @@ public final class OpeningBook{
             double c6 = 116055;
             double d6 = 72476;
             double sumGames = c5 + e5 + e6 + c6 + d6;
-            double rand = 0.1;
+            double rand = 0.5;
 //            double rand = Math.random();
             if (rand < c5 / sumGames) {
                 return new MoveTuple(50, 34);
@@ -172,7 +172,10 @@ public final class OpeningBook{
                 return new MoveTuple(57, 42);
             }
         }
-
+        else if (moveNum==3&&position.getWhitePieces()[28] == wpawn&&position.getBlackPieces()[36] == bpawn
+                && position.getWhitePieces()[21]==wknight){
+            return new MoveTuple(57, 42);
+        }
 
         return null;
     }

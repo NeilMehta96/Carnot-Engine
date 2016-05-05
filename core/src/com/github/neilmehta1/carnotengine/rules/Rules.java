@@ -123,7 +123,8 @@ public class Rules {
             moveAllowed = true;
 
         } else if ((to / 8 + 1 == from / 8 && ((to % 8 - 1 == from % 8 || to % 8 + 1 == from % 8) && position.getWhitePieces()[to] == empty))
-                && ((position.getEnPassant() + 1 == from && position.getWhitePieces()[from - 1] == wpawn && to + 9 == from) || (position.getEnPassant() - 1 == from && position.getWhitePieces()[from + 1] == wpawn && to - 7 == from)) && from / 8 == position.getEnPassant() / 8) {
+                && ((position.getEnPassant() + 1 == from && position.getWhitePieces()[from - 1] == wpawn && to + 9 ==
+                from) || (position.getEnPassant() - 1 == from && position.getWhitePieces()[from + 1] == wpawn && to + 7 == from)) && from / 8 == position.getEnPassant() / 8) {
             moveAllowed = true;
         }
         /**
